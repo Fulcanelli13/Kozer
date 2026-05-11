@@ -1,0 +1,4354 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kozer</title>
+  <style>
+    :root {
+      --bg: #fff8ef;
+      --card: #ffffff;
+      --text: #2b2118;
+      --muted: #7a6b5d;
+      --accent: #7b1e3a;
+      --accent-dark: #5b1228;
+      --accent-2: #1f5d50;
+      --border: #eadccc;
+      --soft: #f7eadc;
+      --danger: #9f2a2a;
+      --success: #276749;
+      --shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, var(--bg), #fffdf8);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 86px;
+    }
+
+    header {
+      padding: 22px 18px 12px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      letter-spacing: -0.03em;
+    }
+
+    .brand .badge {
+      background: var(--soft);
+      color: var(--accent-dark);
+      border: 1px solid var(--border);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+      max-width: 700px;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 18px 40px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 248, 239, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 10px 0;
+      margin: 10px 0 18px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .tab-button {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 10px 8px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 650;
+      box-shadow: 0 2px 8px rgba(43, 33, 24, 0.04);
+    }
+
+    .tab-button.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    .grid { display: grid; gap: 14px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+
+    .card h2, .card h3 { margin-top: 0; line-height: 1.1; }
+    .card h2 { font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; }
+
+    .muted { color: var(--muted); }
+    .small { font-size: 0.9rem; }
+
+    label { display: block; font-weight: 700; margin: 12px 0 5px; }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fffdf9;
+      color: var(--text);
+      padding: 11px 12px;
+      border-radius: 13px;
+      font: inherit;
+      outline: none;
+    }
+
+    textarea { min-height: 90px; resize: vertical; }
+
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+    button, .button {
+      border: none;
+      background: var(--accent);
+      color: white;
+      padding: 11px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 750;
+      font: inherit;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    button.secondary { background: var(--accent-2); }
+    button.ghost { background: var(--soft); color: var(--text); border: 1px solid var(--border); }
+    button.danger { background: var(--danger); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      background: var(--soft);
+      color: var(--muted);
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin: 2px 4px 2px 0;
+    }
+
+    .list { display: grid; gap: 10px; margin-top: 12px; }
+
+    .item {
+      border: 1px solid var(--border);
+      background: #fffdf9;
+      padding: 14px;
+      border-radius: 16px;
+    }
+
+    .phrase {
+      font-size: clamp(1.55rem, 6vw, 2.4rem);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.15;
+      margin: 10px 0;
+    }
+
+    .translation { font-size: 1.1rem; color: var(--muted); margin-bottom: 12px; }
+
+    .option {
+      width: 100%;
+      display: block;
+      text-align: left;
+      background: #fffdf9;
+      color: var(--text);
+      border: 1px solid var(--border);
+      margin: 8px 0;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 650;
+    }
+
+    .option.correct { border-color: var(--success); background: #edf8f1; }
+    .option.incorrect { border-color: var(--danger); background: #fff0f0; }
+
+    .feedback {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--soft);
+      border: 1px solid var(--border);
+    }
+
+    .feedback.good { background: #edf8f1; border-color: #b9e0c5; }
+    .feedback.bad { background: #fff0f0; border-color: #efc4c4; }
+
+    .dialogue-line {
+      border-left: 4px solid var(--accent);
+      padding: 10px 12px;
+      background: #fffdf9;
+      border-radius: 0 14px 14px 0;
+      margin: 10px 0;
+    }
+
+    .dialogue-line .speaker { font-weight: 800; color: var(--accent-dark); }
+
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+    .stat {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat .num { font-size: 1.6rem; font-weight: 850; color: var(--accent-dark); }
+    .hidden { display: none !important; }
+
+    .category-button, .section-button, .lesson-button {
+      width: 100%;
+      text-align: left;
+      display: block;
+      background: #fffdf9;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+/* ================================
+   KOZER THEME STRIPES
+   ================================ */
+
+.theme-mauritius {
+  border-top: 8px solid transparent;
+  border-image: linear-gradient(
+    90deg,
+    #e31b23 0 25%,
+    #1d4ed8 25% 50%,
+    #facc15 50% 75%,
+    #15803d 75% 100%
+  ) 1;
+}
+
+.theme-ireland {
+  border-top: 8px solid transparent;
+  border-image: linear-gradient(
+    90deg,
+    #169b62 0 33.33%,
+    #ffffff 33.33% 66.66%,
+    #ff883e 66.66% 100%
+  ) 1;
+}
+
+.theme-romance {
+  border-top: 8px solid #7b1e3a;
+}
+
+.theme-gym {
+  border-top: 8px solid #1f5d50;
+}
+
+.theme-faith {
+  border-top: 8px solid #5b1228;
+}
+
+.theme-neutral {
+  border-top: 8px solid var(--soft);
+}
+
+    .category-button h3, .section-button h3, .lesson-button h3 { margin-bottom: 6px; }
+    .section-panel { margin-top: 14px; }
+
+    .floating-help {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 30;
+      box-shadow: 0 12px 24px rgba(43, 33, 24, 0.18);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(43, 33, 24, 0.45);
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-card {
+      width: min(920px, 100%);
+      max-height: 88vh;
+      overflow: auto;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 18px 50px rgba(43, 33, 24, 0.25);
+    }
+    
+    /* ================================
+   SCROLLABLE SECTION / DIALOGUE AREAS
+   ================================ */
+
+.scroll-box {
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 6px;
+  margin-top: 12px;
+  border-radius: 18px;
+}
+
+.scroll-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-box::-webkit-scrollbar-track {
+  background: var(--soft);
+  border-radius: 999px;
+}
+
+.scroll-box::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.compact-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+    @media (max-width: 760px) {
+      nav { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+      .tab-button { font-size: 0.85rem; padding: 9px 4px; }
+      .grid.two { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+      .brand { flex-direction: column; }
+      .floating-help { left: 16px; right: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div>
+        <h1>Kozer</h1>
+        <p>French and Kreol for speaking warmly with Andy’s family in Mauritius.</p>
+      </div>
+      <span class="badge">Local-only app</span>
+    </div>
+  </header>
+
+  <main>
+    <nav aria-label="Main navigation">
+      <button class="tab-button active" data-tab="home">Home</button>
+      <button class="tab-button" data-tab="learn">Learn</button>
+      <button class="tab-button" data-tab="practice">Practice</button>
+      <button class="tab-button" data-tab="add">Add</button>
+      <button class="tab-button" data-tab="data">Data</button>
+    </nav>
+
+    <section id="home" class="screen active">
+      <div class="card">
+        <h2>Welcome</h2>
+        <p class="muted">This is only the working skeleton. Once this structure is right, add the full dialogue and vocabulary content section by section.</p>
+        <div class="row">
+          <button id="homePracticeButton">Start mixed practice</button>
+          <button class="secondary" id="homeCrashButton">Open crash course</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Quick learn</h2>
+        <div id="homeCategoryCards" class="grid two"></div>
+      </div>
+      <div class="card">
+        <h2>Content summary</h2>
+        <div class="stats" id="homeStats"></div>
+      </div>
+    </section>
+
+    <section id="learn" class="screen">
+      <div id="learnShell"></div>
+    </section>
+
+    <section id="practice" class="screen">
+      <div id="practiceSetup" class="card">
+        <h2>Randomised MCQ practice</h2>
+        <p class="muted">Level 1 checks meaning. Level 2 asks for the best response. The crash course is not included in quizzes.</p>
+        <div class="grid two">
+          <div>
+            <label for="practiceMode">Mode</label>
+            <select id="practiceMode">
+              <option value="mixed">Mixed Level 1 + Level 2</option>
+              <option value="level1">Level 1: understand the question</option>
+              <option value="level2">Level 2: choose the answer</option>
+            </select>
+          </div>
+          <div>
+            <label for="practiceCategory">Category</label>
+            <select id="practiceCategory"></select>
+          </div>
+          <div>
+            <label for="practiceLanguage">Language</label>
+            <select id="practiceLanguage">
+              <option value="all">All languages</option>
+              <option value="French">French</option>
+              <option value="Kreol">Kreol</option>
+            </select>
+          </div>
+          <div>
+            <label for="practiceCount">Number of questions</label>
+            <select id="practiceCount">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="15">15</option>
+            </select>
+          </div>
+        </div>
+        <div class="row" style="margin-top:16px;">
+          <button id="startPracticeButton">Start practice</button>
+        </div>
+      </div>
+
+      <div id="practiceRunner" class="card hidden"></div>
+      <div id="practiceResults" class="card hidden"></div>
+    </section>
+
+    <section id="add" class="screen">
+      <div class="grid two">
+        <div class="card">
+          <h2>Add a card</h2>
+          <p class="muted">Use this for vocabulary, phrases, emergency expressions, or useful sentences.</p>
+          <form id="cardForm">
+            <label for="cardLanguage">Language</label>
+            <select id="cardLanguage"><option>French</option><option>Kreol</option></select>
+            <label for="cardCategoryGroup">Category group</label>
+            <select id="cardCategoryGroup"></select>
+            <label for="cardCategory">Specific category</label>
+            <input id="cardCategory" list="categoryList" placeholder="Leave blank to use group default" />
+            <label for="cardSituation">Situation</label>
+            <input id="cardSituation" placeholder="Being offered more food" />
+            <label for="cardFront">Front</label>
+            <input id="cardFront" placeholder="Un petit peu, merci." required />
+            <label for="cardBack">Meaning</label>
+            <input id="cardBack" placeholder="A little bit, thank you." required />
+            <label for="cardNote">Note</label>
+            <textarea id="cardNote" placeholder="When would Suzanne actually use this?"></textarea>
+            <button type="submit">Save card</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Add a question</h2>
+          <p class="muted">This automatically becomes Level 1 and Level 2 MCQ material.</p>
+          <form id="questionForm">
+            <label for="qLanguage">Language</label>
+            <select id="qLanguage"><option>French</option><option>Kreol</option></select>
+            <label for="qCategoryGroup">Category group</label>
+            <select id="qCategoryGroup"></select>
+            <label for="qCategory">Specific category</label>
+            <input id="qCategory" list="categoryList" placeholder="Leave blank to use group default" />
+            <label for="qSituation">Situation</label>
+            <input id="qSituation" placeholder="At the table" />
+            <label for="qText">Question</label>
+            <input id="qText" placeholder="Tu veux encore du riz ?" required />
+            <label for="qEnglish">Question meaning</label>
+            <input id="qEnglish" placeholder="Do you want more rice?" required />
+            <label for="qAnswers">Good answers</label>
+            <textarea id="qAnswers" placeholder="Un petit peu, merci. | A little bit, thank you.&#10;Non merci, j’ai bien mangé. | No thank you, I ate well." required></textarea>
+            <p class="muted small">Put each answer on a new line. Use: French/Kreol phrase | English meaning</p>
+            <label for="qNote">Note</label>
+            <textarea id="qNote" placeholder="Useful when someone offers more food."></textarea>
+            <button type="submit">Save question</button>
+          </form>
+        </div>
+      </div>
+      <datalist id="categoryList"></datalist>
+    </section>
+
+    <section id="data" class="screen">
+      <div class="grid two">
+        <div class="card">
+          <h2>Backup and restore</h2>
+          <p class="muted">This app stores data only in this browser. Export regularly if Suzanne adds material.</p>
+          <div class="row">
+            <button id="exportDataButton">Export JSON</button>
+            <label class="button secondary" for="importFile">Import JSON</label>
+            <input id="importFile" type="file" accept="application/json" class="hidden" />
+          </div>
+        </div>
+        <div class="card">
+          <h2>Reset</h2>
+          <p class="muted">This deletes local changes and reloads the starter skeleton.</p>
+          <button class="danger" id="resetDataButton">Reset to starter skeleton</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <h2>Current data summary</h2>
+        <div id="dataSummary" class="stats"></div>
+      </div>
+    </section>
+  </main>
+
+  <button id="floatingHelpButton" class="floating-help">Help, I’m lost</button>
+  <div id="helpModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="modal-card">
+      <div class="row" style="justify-content:space-between;">
+        <h2 id="helpTitle">Help, I’m lost</h2>
+        <button class="ghost" id="closeHelpButton">Close</button>
+      </div>
+      <p class="muted">Fast survival phrases. Keep this short and memorisable.</p>
+      <div class="grid two" id="helpContent"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "kozerSkeleton.v1";
+
+
+const categoryGroups = [
+  {
+    id: "crash_course",
+    title: "French Crash Course",
+    description: "Grammar refresher, verbs, tenses, questions, and sentence patterns. Reference only, not quiz material.",
+    defaultCategory: "Grammar Reference",
+    theme: "theme-neutral",
+    includes: ["Grammar Reference"]
+  },
+  {
+    id: "family_french",
+    title: "Family French",
+    description: "Meeting family, meals, Mauritius, hospitality, small talk, and polite exits.",
+    defaultCategory: "Family French",
+    theme: "theme-mauritius",
+    includes: [
+      "Survival French",
+      "Arrival and Welcome",
+      "Food and Table Talk",
+      "Mauritius",
+      "Ireland",
+      "Family French",
+      "Andy"
+    ]
+  },
+  {
+    id: "romance",
+    title: "Romance and Affection",
+    description: "Love phrases, compliments, reassurance, and words of endearment for Andy.",
+    defaultCategory: "Romance and Affection",
+    theme: "theme-romance",
+    includes: ["Romance and Affection"]
+  },
+  {
+    id: "gym",
+    title: "Gym and Anatomy",
+    description: "Training, body parts, soreness, protein, tiredness, and recovery.",
+    defaultCategory: "Gym and Anatomy",
+    theme: "theme-gym",
+    includes: ["Gym and Anatomy"]
+  },
+  {
+    id: "fruits_colours",
+    title: "Mauritian Fruits and Colours",
+    description: "Fruit names, colours, sweetness, ripeness, and simple descriptions.",
+    defaultCategory: "Mauritian Fruits and Colours",
+    theme: "theme-mauritius",
+    includes: ["Mauritian Fruits and Colours"]
+  },
+  {
+    id: "faith",
+    title: "Faith and Church",
+    description: "Mass, Catholic identity, and simple church conversation.",
+    defaultCategory: "Faith and Church",
+    theme: "theme-faith",
+    includes: ["Faith and Church"]
+  },
+  {
+    id: "kreol_support",
+    title: "Kreol Support",
+    description: "Small survival set for food, compliments, heat, and getting lost.",
+    defaultCategory: "Kreol Support",
+    theme: "theme-mauritius",
+    includes: ["Kreol Support"]
+  }
+];
+    
+    const crashLessons = [
+  {
+    id: "patterns",
+    title: "Survival sentence patterns",
+    summary: "Reusable sentence frames for immediate conversation.",
+    sections: [
+      {
+        heading: "Core patterns",
+        body:
+          "Je suis… = I am…\n" +
+          "J’ai… = I have…\n" +
+          "J’aime… = I like/love…\n" +
+          "Je veux… = I want…\n" +
+          "Je voudrais… = I would like…\n" +
+          "Je vais… = I am going to…\n" +
+          "J’ai besoin de… = I need…\n" +
+          "Je ne comprends pas… = I do not understand…"
+      },
+      {
+        heading: "Emergency patterns",
+        body:
+          "Je ne comprends pas.\n" +
+          "I do not understand.\n\n" +
+          "Vous pouvez répéter ?\n" +
+          "Can you repeat?\n\n" +
+          "Vous pouvez parler lentement ?\n" +
+          "Can you speak slowly?\n\n" +
+          "Andy peut traduire ?\n" +
+          "Can Andy translate?"
+      },
+      {
+        heading: "Useful examples",
+        body:
+          "Je suis fatiguée.\n" +
+          "I am tired.\n\n" +
+          "J’ai soif.\n" +
+          "I am thirsty.\n\n" +
+          "J’aime Maurice.\n" +
+          "I like Mauritius.\n\n" +
+          "Je voudrais de l’eau.\n" +
+          "I would like water.\n\n" +
+          "Je vais me reposer.\n" +
+          "I am going to rest."
+      }
+    ]
+  },
+
+  {
+    id: "pronouns",
+    title: "Subject pronouns and politeness",
+    summary: "je, tu, vous, and when to use each.",
+    sections: [
+      {
+        heading: "Subject pronouns",
+        body:
+          "je = I\n" +
+          "tu = you, informal\n" +
+          "il = he / it\n" +
+          "elle = she / it\n" +
+          "nous = we\n" +
+          "vous = you formal / you plural\n" +
+          "ils = they, masculine or mixed\n" +
+          "elles = they, feminine only"
+      },
+      {
+        heading: "Tu vs vous",
+        body:
+          "Use tu with Andy.\n" +
+          "Use vous with parents, older relatives, and people she has just met.\n" +
+          "Switch to tu only if invited."
+      },
+      {
+        heading: "Examples",
+        body:
+          "Tu vas bien ?\n" +
+          "Are you okay?\n\n" +
+          "Vous allez bien ?\n" +
+          "Are you well?"
+      }
+    ]
+  },
+
+  {
+    id: "present_regular",
+    title: "Present tense: regular verbs",
+    summary: "French present tense can mean I speak, I am speaking, or I do speak.",
+    sections: [
+      {
+        heading: "What the present tense means",
+        body:
+          "Je parle français can mean:\n\n" +
+          "I speak French.\n" +
+          "I am speaking French.\n" +
+          "I do speak French.\n\n" +
+          "French does not separate these forms the way English does."
+      },
+      {
+        heading: "Regular -ER verbs",
+        body:
+          "Remove -er and add:\n\n" +
+          "je: -e\n" +
+          "tu: -es\n" +
+          "il/elle: -e\n" +
+          "nous: -ons\n" +
+          "vous: -ez\n" +
+          "ils/elles: -ent\n\n" +
+          "parler:\n" +
+          "je parle\n" +
+          "tu parles\n" +
+          "il/elle parle\n" +
+          "nous parlons\n" +
+          "vous parlez\n" +
+          "ils/elles parlent"
+      },
+      {
+        heading: "Useful -ER verbs",
+        body:
+          "aimer = to like / love\n" +
+          "parler = to speak\n" +
+          "manger = to eat\n" +
+          "habiter = to live\n" +
+          "travailler = to work / train\n" +
+          "regarder = to watch/look at\n" +
+          "écouter = to listen"
+      },
+      {
+        heading: "Examples",
+        body:
+          "Je parle un peu français.\n" +
+          "I speak a little French.\n\n" +
+          "J’aime Maurice.\n" +
+          "I like Mauritius.\n\n" +
+          "J’habite à Dublin.\n" +
+          "I live in Dublin.\n\n" +
+          "Je travaille les jambes aujourd’hui.\n" +
+          "I am training legs today."
+      }
+    ]
+  },
+
+  {
+    id: "irregular_verbs",
+    title: "Essential irregular verbs",
+    summary: "être, avoir, aller, faire, vouloir, pouvoir, devoir.",
+    sections: [
+      {
+        heading: "Être — to be",
+        body:
+          "je suis = I am\n" +
+          "tu es = you are\n" +
+          "il/elle est = he/she is\n" +
+          "nous sommes = we are\n" +
+          "vous êtes = you are\n" +
+          "ils/elles sont = they are\n\n" +
+          "Examples:\n" +
+          "Je suis irlandaise.\n" +
+          "Je suis fatiguée.\n" +
+          "Je suis contente."
+      },
+      {
+        heading: "Avoir — to have",
+        body:
+          "j’ai = I have\n" +
+          "tu as = you have\n" +
+          "il/elle a = he/she has\n" +
+          "nous avons = we have\n" +
+          "vous avez = you have\n" +
+          "ils/elles ont = they have\n\n" +
+          "Examples:\n" +
+          "J’ai faim. = I am hungry.\n" +
+          "J’ai soif. = I am thirsty.\n" +
+          "J’ai chaud. = I am hot.\n" +
+          "J’ai besoin d’eau. = I need water."
+      },
+      {
+        heading: "Aller — to go",
+        body:
+          "je vais = I go / I am going\n" +
+          "tu vas = you go\n" +
+          "il/elle va = he/she goes\n" +
+          "nous allons = we go\n" +
+          "vous allez = you go\n" +
+          "ils/elles vont = they go\n\n" +
+          "Examples:\n" +
+          "Je vais à la salle.\n" +
+          "Nous allons à la messe.\n" +
+          "Je vais me reposer."
+      },
+      {
+        heading: "Faire — to do / make",
+        body:
+          "je fais = I do\n" +
+          "tu fais = you do\n" +
+          "il/elle fait = he/she does\n" +
+          "nous faisons = we do\n" +
+          "vous faites = you do\n" +
+          "ils/elles font = they do\n\n" +
+          "Examples:\n" +
+          "Je fais du sport.\n" +
+          "J’ai fait une séance de jambes.\n" +
+          "Il fait chaud."
+      },
+      {
+        heading: "Vouloir, pouvoir, devoir",
+        body:
+          "vouloir = to want\n" +
+          "je veux = I want\n" +
+          "vous voulez = you want\n\n" +
+          "pouvoir = can / to be able to\n" +
+          "je peux = I can\n" +
+          "vous pouvez = you can\n\n" +
+          "devoir = must / need to\n" +
+          "je dois = I must / I need to\n" +
+          "vous devez = you must"
+      }
+    ]
+  },
+
+  {
+    id: "near_future",
+    title: "Near future",
+    summary: "The easiest way to talk about the future: aller + infinitive.",
+    sections: [
+      {
+        heading: "Formula",
+        body:
+          "aller + infinitive\n\n" +
+          "Conjugate aller, then add the unchanged verb."
+      },
+      {
+        heading: "Examples",
+        body:
+          "Je vais manger.\n" +
+          "I am going to eat.\n\n" +
+          "Je vais dormir.\n" +
+          "I am going to sleep.\n\n" +
+          "Je vais apprendre.\n" +
+          "I am going to learn.\n\n" +
+          "Je vais me reposer.\n" +
+          "I am going to rest.\n\n" +
+          "Nous allons à la messe.\n" +
+          "We are going to Mass."
+      },
+      {
+        heading: "Useful infinitives",
+        body:
+          "manger = to eat\n" +
+          "boire = to drink\n" +
+          "dormir = to sleep\n" +
+          "apprendre = to learn\n" +
+          "parler = to speak\n" +
+          "se reposer = to rest\n" +
+          "partir = to leave"
+      }
+    ]
+  },
+
+  {
+    id: "past_tense",
+    title: "Past tense: passé composé",
+    summary: "The main spoken past tense: avoir or être + past participle.",
+    sections: [
+      {
+        heading: "Formula",
+        body:
+          "avoir or être + past participle\n\n" +
+          "Most verbs use avoir.\n" +
+          "Some movement and reflexive verbs use être."
+      },
+      {
+        heading: "With avoir",
+        body:
+          "J’ai mangé.\n" +
+          "I ate.\n\n" +
+          "J’ai parlé.\n" +
+          "I spoke.\n\n" +
+          "J’ai travaillé.\n" +
+          "I worked / trained.\n\n" +
+          "J’ai compris.\n" +
+          "I understood."
+      },
+      {
+        heading: "With être",
+        body:
+          "Je suis allée à la salle.\n" +
+          "I went to the gym.\n\n" +
+          "Je suis venue à Maurice.\n" +
+          "I came to Mauritius.\n\n" +
+          "Je suis arrivée hier.\n" +
+          "I arrived yesterday."
+      },
+      {
+        heading: "Suzanne’s feminine agreement",
+        body:
+          "Because Suzanne is female, some words add -e:\n\n" +
+          "allé → allée\n" +
+          "venu → venue\n" +
+          "arrivé → arrivée\n" +
+          "fatigué → fatiguée\n" +
+          "content → contente\n" +
+          "amoureux → amoureuse"
+      },
+      {
+        heading: "Common past participles",
+        body:
+          "parler → parlé\n" +
+          "manger → mangé\n" +
+          "aimer → aimé\n" +
+          "travailler → travaillé\n" +
+          "faire → fait\n" +
+          "prendre → pris\n" +
+          "comprendre → compris\n" +
+          "boire → bu\n" +
+          "voir → vu"
+      }
+    ]
+  },
+
+  {
+    id: "negation_questions",
+    title: "Negation and questions",
+    summary: "How to say not, and how to ask simple questions.",
+    sections: [
+      {
+        heading: "Negation",
+        body:
+          "ne + verb + pas\n\n" +
+          "Je comprends.\n" +
+          "I understand.\n\n" +
+          "Je ne comprends pas.\n" +
+          "I do not understand.\n\n" +
+          "Je parle français.\n" +
+          "I speak French.\n\n" +
+          "Je ne parle pas très bien français.\n" +
+          "I do not speak French very well."
+      },
+      {
+        heading: "Spoken shortcut",
+        body:
+          "In spoken French, people often drop ne:\n\n" +
+          "Je comprends pas.\n\n" +
+          "But Suzanne should learn the full form first:\n\n" +
+          "Je ne comprends pas."
+      },
+      {
+        heading: "Easy spoken questions",
+        body:
+          "Use the sentence and raise your voice:\n\n" +
+          "Tu comprends ?\n" +
+          "Do you understand?\n\n" +
+          "Tu veux manger ?\n" +
+          "Do you want to eat?\n\n" +
+          "Tu aimes Maurice ?\n" +
+          "Do you like Mauritius?"
+      },
+      {
+        heading: "Est-ce que",
+        body:
+          "Put est-ce que before a normal sentence:\n\n" +
+          "Est-ce que tu comprends ?\n" +
+          "Do you understand?\n\n" +
+          "Est-ce que tu veux manger ?\n" +
+          "Do you want to eat?"
+      },
+      {
+        heading: "Question words",
+        body:
+          "qui = who\n" +
+          "quoi / que = what\n" +
+          "où = where\n" +
+          "quand = when\n" +
+          "pourquoi = why\n" +
+          "comment = how\n" +
+          "combien = how much / how many\n" +
+          "quel / quelle = which / what"
+      }
+    ]
+  },
+
+  {
+    id: "gender_articles",
+    title: "Gender, agreement, and articles",
+    summary: "Masculine/feminine, plural, and food articles.",
+    sections: [
+      {
+        heading: "Definite articles: the",
+        body:
+          "le = masculine singular\n" +
+          "la = feminine singular\n" +
+          "l’ = before a vowel\n" +
+          "les = plural\n\n" +
+          "le riz = the rice\n" +
+          "la mangue = the mango\n" +
+          "l’ananas = the pineapple\n" +
+          "les fruits = the fruits"
+      },
+      {
+        heading: "Indefinite articles: a / some",
+        body:
+          "un = a, masculine\n" +
+          "une = a, feminine\n" +
+          "des = some, plural\n\n" +
+          "un fruit = a fruit\n" +
+          "une mangue = a mango\n" +
+          "des fruits = some fruits"
+      },
+      {
+        heading: "Partitive articles: some",
+        body:
+          "du = some, masculine\n" +
+          "de la = some, feminine\n" +
+          "de l’ = some before vowel\n" +
+          "des = some plural\n\n" +
+          "du riz = some rice\n" +
+          "de la mangue = some mango\n" +
+          "de l’eau = some water\n" +
+          "des fruits = some fruits"
+      },
+      {
+        heading: "Feminine forms for Suzanne",
+        body:
+          "Je suis contente.\n" +
+          "I am happy.\n\n" +
+          "Je suis fatiguée.\n" +
+          "I am tired.\n\n" +
+          "Je suis irlandaise.\n" +
+          "I am Irish.\n\n" +
+          "Je suis amoureuse.\n" +
+          "I am in love.\n\n" +
+          "Je suis allée à la salle.\n" +
+          "I went to the gym."
+      }
+    ]
+  },
+
+  {
+    id: "possessives_reflexives",
+    title: "Possessives and reflexive verbs",
+    summary: "My/your, and verbs like je me repose, je me sens.",
+    sections: [
+      {
+        heading: "Possessives",
+        body:
+          "mon = my, masculine\n" +
+          "ma = my, feminine\n" +
+          "mes = my, plural\n\n" +
+          "ton = your, masculine\n" +
+          "ta = your, feminine\n" +
+          "tes = your, plural\n\n" +
+          "mon amour = my love\n" +
+          "ma famille = my family\n" +
+          "mes jambes = my legs\n" +
+          "ton sourire = your smile\n" +
+          "tes yeux = your eyes"
+      },
+      {
+        heading: "Before a vowel",
+        body:
+          "Use mon before a vowel, even if the noun is feminine:\n\n" +
+          "mon amie\n" +
+          "my female friend"
+      },
+      {
+        heading: "Reflexive verbs",
+        body:
+          "Reflexive verbs use me / te / se:\n\n" +
+          "Je me repose.\n" +
+          "I rest.\n\n" +
+          "Je me sens bien.\n" +
+          "I feel good.\n\n" +
+          "Je vais me reposer.\n" +
+          "I am going to rest."
+      }
+    ]
+  },
+
+  {
+    id: "practical_constructions",
+    title: "Practical constructions",
+    summary: "Need, pain, food, gym, and romance formulas.",
+    sections: [
+      {
+        heading: "I need",
+        body:
+          "avoir besoin de + noun/verb\n\n" +
+          "J’ai besoin d’eau.\n" +
+          "I need water.\n\n" +
+          "J’ai besoin de dormir.\n" +
+          "I need to sleep.\n\n" +
+          "J’ai besoin de protéines.\n" +
+          "I need protein.\n\n" +
+          "J’ai besoin de me reposer.\n" +
+          "I need to rest."
+      },
+      {
+        heading: "Pain and soreness",
+        body:
+          "avoir mal à + body part\n\n" +
+          "J’ai mal à la tête.\n" +
+          "My head hurts.\n\n" +
+          "J’ai mal au dos.\n" +
+          "My back hurts.\n\n" +
+          "J’ai mal aux jambes.\n" +
+          "My legs hurt.\n\n" +
+          "J’ai mal aux fessiers.\n" +
+          "My glutes are sore."
+      },
+      {
+        heading: "Romance",
+        body:
+          "Je t’aime.\n" +
+          "I love you.\n\n" +
+          "Tu me manques.\n" +
+          "I miss you.\n\n" +
+          "Je pense à toi.\n" +
+          "I am thinking of you.\n\n" +
+          "Je me sens bien avec toi.\n" +
+          "I feel good with you.\n\n" +
+          "Tu me rends heureuse.\n" +
+          "You make me happy."
+      },
+      {
+        heading: "Gym",
+        body:
+          "J’ai travaillé les jambes.\n" +
+          "I trained legs.\n\n" +
+          "J’ai travaillé les fessiers.\n" +
+          "I trained glutes.\n\n" +
+          "J’ai fait du cardio.\n" +
+          "I did cardio.\n\n" +
+          "J’ai des courbatures.\n" +
+          "I have muscle soreness."
+      }
+    ]
+  },
+
+  {
+    id: "mini_conjugation_table",
+    title: "Mini conjugation table",
+    summary: "The forms she will use most: je, tu, vous.",
+    sections: [
+      {
+        heading: "Core verbs",
+        body:
+          "être:\n" +
+          "je suis / tu es / vous êtes\n\n" +
+          "avoir:\n" +
+          "j’ai / tu as / vous avez\n\n" +
+          "aller:\n" +
+          "je vais / tu vas / vous allez\n\n" +
+          "faire:\n" +
+          "je fais / tu fais / vous faites"
+      },
+      {
+        heading: "Conversation verbs",
+        body:
+          "vouloir:\n" +
+          "je veux / tu veux / vous voulez\n\n" +
+          "pouvoir:\n" +
+          "je peux / tu peux / vous pouvez\n\n" +
+          "aimer:\n" +
+          "j’aime / tu aimes / vous aimez\n\n" +
+          "parler:\n" +
+          "je parle / tu parles / vous parlez"
+      },
+      {
+        heading: "Practical verbs",
+        body:
+          "comprendre:\n" +
+          "je comprends / tu comprends / vous comprenez\n\n" +
+          "manger:\n" +
+          "je mange / tu manges / vous mangez\n\n" +
+          "boire:\n" +
+          "je bois / tu bois / vous buvez\n\n" +
+          "prendre:\n" +
+          "je prends / tu prends / vous prenez"
+      }
+    ]
+  }
+];
+
+    const starterData = {
+  cards: [],
+  questions: [],
+  dialogues: []
+};
+
+// ================================
+// CONTENT CHUNK 1 — SURVIVAL FRENCH
+// ================================
+
+starterData.cards.push(
+  card(
+    "French",
+    "Survival French",
+    "I do not understand",
+    "Je n’ai pas compris.",
+    "I didn’t understand.",
+    "Essential emergency phrase."
+  ),
+  card(
+    "French",
+    "Survival French",
+    "Please repeat",
+    "Vous pouvez répéter, s’il vous plaît ?",
+    "Can you repeat, please?",
+    "Formal/polite."
+  ),
+  card(
+    "French",
+    "Survival French",
+    "Speak slowly",
+    "Vous pouvez parler lentement, s’il vous plaît ?",
+    "Can you speak slowly, please?",
+    "Formal/polite."
+  ),
+  card(
+    "French",
+    "Survival French",
+    "Andy translate",
+    "Andy peut traduire ?",
+    "Can Andy translate?",
+    "Useful when she is lost."
+  ),
+  card(
+    "French",
+    "Survival French",
+    "A little French",
+    "Je parle un petit peu français.",
+    "I speak a little French.",
+    "Good first response."
+  ),
+  card(
+    "French",
+    "Survival French",
+    "Learning French",
+    "J’apprends le français.",
+    "I am learning French.",
+    "Good simple explanation."
+  ),
+  card(
+    "French",
+    "Survival French",
+    "Not yet fluent",
+    "Je ne parle pas encore très bien.",
+    "I do not speak very well yet.",
+    "Useful and modest."
+  ),
+  card(
+    "French",
+    "Survival French",
+    "Little by little",
+    "Je vais apprendre petit à petit.",
+    "I will learn little by little.",
+    "Warm learning phrase."
+  )
+);
+
+starterData.questions.push(
+  q(
+    "French",
+    "Survival French",
+    "Understanding",
+    "Tu comprends ?",
+    "Do you understand?",
+    [
+      ["J’ai compris un peu, mais pas tout.", "I understood a little, but not everything."],
+      ["Je n’ai pas compris. Vous pouvez répéter ?", "I didn’t understand. Can you repeat?"]
+    ],
+    "Basic comprehension question."
+  ),
+  q(
+    "French",
+    "Survival French",
+    "Speaking French",
+    "Tu parles français ?",
+    "Do you speak French?",
+    [
+      ["Un petit peu. J’apprends le français.", "A little bit. I am learning French."],
+      ["Je ne parle pas encore très bien.", "I do not speak very well yet."]
+    ],
+    "Likely first family question."
+  ),
+  q(
+    "French",
+    "Survival French",
+    "Speak slowly",
+    "Vous pouvez parler français plus lentement ?",
+    "Can you speak French more slowly?",
+    [
+      ["Oui, s’il vous plaît. Je comprends mieux lentement.", "Yes, please. I understand better slowly."],
+      ["Merci. Je suis encore en train d’apprendre.", "Thank you. I am still learning."]
+    ],
+    "Useful when overwhelmed."
+  )
+);
+
+// =================================
+// CONTENT CHUNK 2 — ARRIVAL/WELCOME
+// =================================
+
+starterData.cards.push(
+  card(
+    "French",
+    "Arrival and Welcome",
+    "First meeting",
+    "Bonjour, enchantée.",
+    "Hello, nice to meet you.",
+    "Simple first greeting."
+  ),
+  card(
+    "French",
+    "Arrival and Welcome",
+    "Thanking host",
+    "Merci de m’accueillir.",
+    "Thank you for welcoming me.",
+    "Very useful with family."
+  ),
+  card(
+    "French",
+    "Arrival and Welcome",
+    "Happy to be here",
+    "Je suis très contente d’être ici.",
+    "I am very happy to be here.",
+    "Feminine: contente."
+  ),
+  card(
+    "French",
+    "Arrival and Welcome",
+    "Kindness",
+    "C’est très gentil.",
+    "That is very kind.",
+    "Reusable polite phrase."
+  ),
+  card(
+    "French",
+    "Arrival and Welcome",
+    "Invitation",
+    "Merci beaucoup pour l’invitation.",
+    "Thank you very much for the invitation.",
+    "Useful at arrival."
+  ),
+  card(
+    "French",
+    "Arrival and Welcome",
+    "House compliment",
+    "Votre maison est très belle.",
+    "Your house is very beautiful.",
+    "Polite compliment."
+  ),
+  card(
+    "French",
+    "Arrival and Welcome",
+    "Welcomed",
+    "Je me sens très bien accueillie.",
+    "I feel very welcomed.",
+    "Feminine: accueillie."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Arrival and Welcome",
+    "Arriving at the house",
+    [
+      ["Family", "Bonjour Suzanne, bienvenue à la maison.", "Hello Suzanne, welcome home."],
+      ["Suzanne", "Bonjour, merci beaucoup. Je suis très contente d’être ici.", "Hello, thank you very much. I am very happy to be here."],
+      ["Family", "Tu parles français ?", "Do you speak French?"],
+      ["Suzanne", "Un petit peu. J’apprends le français.", "A little bit. I am learning French."],
+      ["Family", "Très bien !", "Very good!"],
+      ["Suzanne", "Merci, mais parlez lentement, s’il vous plaît.", "Thank you, but speak slowly, please."]
+    ]
+  )
+);
+
+// ==================================
+// CONTENT CHUNK 3 — FOOD/TABLE TALK
+// ==================================
+
+starterData.cards.push(
+  card(
+    "French",
+    "Food and Table Talk",
+    "Being offered more",
+    "Un petit peu, merci.",
+    "A little bit, thank you.",
+    "Most useful table answer."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Small piece",
+    "Juste un petit morceau.",
+    "Just a small piece.",
+    "Useful for snacks/cake."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Accepting",
+    "Oui, avec plaisir.",
+    "Yes, gladly.",
+    "Polite acceptance."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Declining more",
+    "Non merci, j’ai bien mangé.",
+    "No thank you, I ate well.",
+    "Very useful in family meals."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Compliment",
+    "C’est délicieux.",
+    "It is delicious.",
+    "Memorise this."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Smell",
+    "Ça sent très bon.",
+    "It smells very good.",
+    "Before eating."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Trying food",
+    "Je veux goûter.",
+    "I want to try.",
+    "Useful with Mauritian food."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Spicy food",
+    "Je ne mange pas trop épicé.",
+    "I do not eat very spicy food.",
+    "Important in Mauritius."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Spicy but not too much",
+    "Un peu, mais pas trop.",
+    "A little, but not too much.",
+    "Short and practical."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Thirst",
+    "J’ai soif.",
+    "I am thirsty.",
+    "Useful."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Water",
+    "Je voudrais de l’eau, s’il vous plaît.",
+    "I would like water, please.",
+    "Polite request."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Almost full",
+    "Je suis presque pleine.",
+    "I am almost full.",
+    "Feminine: pleine."
+  ),
+  card(
+    "French",
+    "Food and Table Talk",
+    "Ate well",
+    "J’ai très bien mangé.",
+    "I ate very well.",
+    "Good end-of-meal phrase."
+  )
+);
+
+starterData.questions.push(
+  q(
+    "French",
+    "Food and Table Talk",
+    "Being offered more",
+    "Tu veux encore du riz ?",
+    "Do you want more rice?",
+    [
+      ["Un petit peu, merci.", "A little bit, thank you."],
+      ["Non merci, j’ai bien mangé.", "No thank you, I ate well."]
+    ],
+    "Common family meal question."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "Trying food",
+    "Tu veux goûter ?",
+    "Do you want to try?",
+    [
+      ["Oui, merci. Qu’est-ce que c’est ?", "Yes, thank you. What is it?"],
+      ["Oui, je veux goûter un petit peu.", "Yes, I want to try a little."]
+    ],
+    "Useful with new food."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "Spicy food",
+    "Tu manges pimenté ?",
+    "Do you eat spicy food?",
+    [
+      ["Un petit peu, mais pas trop.", "A little bit, but not too much."],
+      ["Je ne mange pas trop épicé.", "I do not eat very spicy food."]
+    ],
+    "Mauritius-relevant."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "Drink",
+    "Tu veux boire quelque chose ?",
+    "Do you want something to drink?",
+    [
+      ["Oui, de l’eau, s’il vous plaît.", "Yes, water, please."],
+      ["Oui, je voudrais de l’eau, merci.", "Yes, I would like water, thank you."]
+    ],
+    "Useful on arrival and meals."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "Taste",
+    "C’est bon ?",
+    "Is it good?",
+    [
+      ["Oui, c’est délicieux.", "Yes, it is delicious."],
+      ["Oui, c’est très bon.", "Yes, it is very good."]
+    ],
+    "Simple food response."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Food and Table Talk",
+    "Being offered more food",
+    [
+      ["Family", "Tu veux encore du riz ?", "Do you want more rice?"],
+      ["Suzanne", "Un petit peu, merci.", "A little bit, thank you."],
+      ["Family", "Tu es sûre ?", "Are you sure?"],
+      ["Suzanne", "Oui, merci. C’était très bon, mais je suis presque pleine.", "Yes, thank you. It was very good, but I am almost full."],
+      ["Family", "Tu as bien mangé ?", "Did you eat well?"],
+      ["Suzanne", "Oui, j’ai très bien mangé.", "Yes, I ate very well."]
+    ]
+  ),
+  dlg(
+    "Food and Table Talk",
+    "Trying Mauritian food",
+    [
+      ["Family", "Tu veux goûter ?", "Do you want to try?"],
+      ["Suzanne", "Oui, merci. Qu’est-ce que c’est ?", "Yes, thank you. What is it?"],
+      ["Family", "C’est un cari.", "It is a curry."],
+      ["Suzanne", "Ça sent très bon.", "It smells very good."],
+      ["Family", "Tu manges pimenté ?", "Do you eat spicy food?"],
+      ["Suzanne", "Un petit peu, mais pas trop.", "A little bit, but not too much."],
+      ["Suzanne", "C’est délicieux.", "It is delicious."]
+    ]
+  ),
+  dlg(
+    "Food and Table Talk",
+    "Tea and snacks",
+    [
+      ["Family", "Tu veux boire quelque chose ?", "Do you want something to drink?"],
+      ["Suzanne", "Oui, de l’eau, s’il vous plaît.", "Yes, water, please."],
+      ["Family", "Tu veux du thé ?", "Do you want tea?"],
+      ["Suzanne", "Oui, avec plaisir.", "Yes, gladly."],
+      ["Family", "Tu veux un gâteau ?", "Do you want a cake/snack?"],
+      ["Suzanne", "Oui, merci. Juste un petit morceau.", "Yes, thank you. Just a small piece."]
+    ]
+  )
+);
+
+// ======================================
+// CONTENT CHUNK 4 — MAURITIUS PRACTICAL
+// ======================================
+
+starterData.cards.push(
+  card(
+    "French",
+    "Mauritius",
+    "Heat",
+    "Il fait très chaud.",
+    "It is very hot.",
+    "Useful constantly in Mauritius."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Heat",
+    "J’ai chaud.",
+    "I am hot.",
+    "French uses 'I have hot'."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Water",
+    "J’ai besoin d’eau.",
+    "I need water.",
+    "Before vowel: de + eau = d’eau."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Sun",
+    "J’ai besoin de crème solaire.",
+    "I need sun cream.",
+    "Very practical."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Mosquitoes",
+    "J’ai besoin d’anti-moustique.",
+    "I need mosquito repellent.",
+    "Evening phrase."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Mosquitoes",
+    "Il y a des moustiques ?",
+    "Are there mosquitoes?",
+    "Practical question."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Rest",
+    "Je vais me reposer un peu.",
+    "I am going to rest a little.",
+    "Polite exit."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Transport",
+    "C’est loin ?",
+    "Is it far?",
+    "Useful in the car."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Transport",
+    "Ça prend combien de temps ?",
+    "How long does it take?",
+    "Useful for outings."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Outings",
+    "On va où ?",
+    "Where are we going?",
+    "Simple and useful."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Compliment",
+    "C’est très beau ici.",
+    "It is very beautiful here.",
+    "Good general compliment."
+  ),
+  card(
+    "French",
+    "Mauritius",
+    "Sea",
+    "La mer est magnifique.",
+    "The sea is magnificent.",
+    "Safe Mauritius compliment."
+  )
+);
+
+starterData.questions.push(
+  q(
+    "French",
+    "Mauritius",
+    "First time",
+    "C’est ta première fois à Maurice ?",
+    "Is it your first time in Mauritius?",
+    [
+      ["Oui, c’est ma première fois.", "Yes, it is my first time."],
+      ["Oui, et je suis très contente d’être ici.", "Yes, and I am very happy to be here."]
+    ],
+    "Likely family question."
+  ),
+  q(
+    "French",
+    "Mauritius",
+    "Liking Mauritius",
+    "Tu aimes Maurice ?",
+    "Do you like Mauritius?",
+    [
+      ["Oui, beaucoup. C’est très beau.", "Yes, very much. It is very beautiful."],
+      ["Oui, j’aime la mer, la nourriture, et la famille d’Andy.", "Yes, I like the sea, the food, and Andy’s family."]
+    ],
+    "Very useful family question."
+  ),
+  q(
+    "French",
+    "Mauritius",
+    "Heat",
+    "Tu trouves qu’il fait chaud ?",
+    "Do you find it hot?",
+    [
+      ["Oui, très chaud. Je ne suis pas habituée à la chaleur.", "Yes, very hot. I am not used to the heat."],
+      ["Oui, mais j’aime le soleil.", "Yes, but I like the sun."]
+    ],
+    "Very likely in Mauritius."
+  ),
+  q(
+    "French",
+    "Mauritius",
+    "Water",
+    "Tu veux de l’eau ?",
+    "Do you want water?",
+    [
+      ["Oui, merci. J’ai un peu soif.", "Yes, thank you. I am a little thirsty."],
+      ["Oui, s’il vous plaît.", "Yes, please."]
+    ],
+    "Useful in heat."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Mauritius",
+    "First time in Mauritius",
+    [
+      ["Family", "C’est ta première fois à Maurice ?", "Is it your first time in Mauritius?"],
+      ["Suzanne", "Oui, c’est ma première fois.", "Yes, it is my first time."],
+      ["Family", "Tu aimes Maurice ?", "Do you like Mauritius?"],
+      ["Suzanne", "Oui, beaucoup. Il fait chaud, mais c’est très beau.", "Yes, very much. It is hot, but it is very beautiful."],
+      ["Family", "Qu’est-ce que tu aimes ?", "What do you like?"],
+      ["Suzanne", "J’aime la mer, la nourriture, et la famille d’Andy.", "I like the sea, the food, and Andy’s family."]
+    ]
+  ),
+  dlg(
+    "Mauritius",
+    "Heat and water",
+    [
+      ["Family", "Tu trouves qu’il fait chaud ?", "Do you find it hot?"],
+      ["Suzanne", "Oui, très chaud. En Irlande, il fait beaucoup plus froid.", "Yes, very hot. In Ireland, it is much colder."],
+      ["Family", "Tu veux de l’eau ?", "Do you want water?"],
+      ["Suzanne", "Oui, merci. J’ai un peu soif.", "Yes, thank you. I am a little thirsty."],
+      ["Family", "Tu vas t’habituer.", "You will get used to it."],
+      ["Suzanne", "J’espère !", "I hope so!"]
+    ]
+  ),
+  dlg(
+    "Mauritius",
+    "Beach and sea",
+    [
+      ["Family", "Tu es allée à la plage ?", "Have you been to the beach?"],
+      ["Suzanne", "Pas encore, mais j’aimerais beaucoup y aller.", "Not yet, but I would really like to go."],
+      ["Family", "Tu aimes la mer ?", "Do you like the sea?"],
+      ["Suzanne", "Oui, j’adore la mer. Elle est magnifique ici.", "Yes, I love the sea. It is magnificent here."],
+      ["Family", "En Irlande aussi il y a la mer.", "In Ireland there is also the sea."],
+      ["Suzanne", "Oui, mais elle est beaucoup plus froide !", "Yes, but it is much colder!"]
+    ]
+  ),
+  dlg(
+    "Mauritius",
+    "Sun cream and mosquitoes",
+    [
+      ["Family", "Tu as mis de la crème solaire ?", "Did you put on sun cream?"],
+      ["Suzanne", "Pas encore. J’ai besoin de crème solaire.", "Not yet. I need sun cream."],
+      ["Family", "Il y a des moustiques le soir.", "There are mosquitoes in the evening."],
+      ["Suzanne", "Ah d’accord. J’ai besoin d’anti-moustique.", "Ah okay. I need mosquito repellent."],
+      ["Family", "Tu veux te reposer ?", "Do you want to rest?"],
+      ["Suzanne", "Oui, je vais me reposer un peu.", "Yes, I am going to rest a little."]
+    ]
+  ),
+  dlg(
+    "Mauritius",
+    "Going out in the car",
+    [
+      ["Family", "On va à Grand Baie.", "We are going to Grand Baie."],
+      ["Suzanne", "D’accord. C’est loin ?", "Okay. Is it far?"],
+      ["Family", "Un peu.", "A little."],
+      ["Suzanne", "Ça prend combien de temps ?", "How long does it take?"],
+      ["Family", "Environ quarante minutes.", "About forty minutes."],
+      ["Suzanne", "D’accord, merci.", "Okay, thank you."]
+    ]
+  )
+);
+
+// ======================================
+// CONTENT CHUNK 5 — FAMILY / IRELAND / ANDY
+// ======================================
+
+starterData.cards.push(
+  card(
+    "French",
+    "Ireland",
+    "Origin",
+    "Je viens d’Irlande.",
+    "I come from Ireland.",
+    "Core answer."
+  ),
+  card(
+    "French",
+    "Ireland",
+    "Identity",
+    "Je suis irlandaise.",
+    "I am Irish.",
+    "Feminine: irlandaise."
+  ),
+  card(
+    "French",
+    "Ireland",
+    "Dublin",
+    "J’habite à Dublin.",
+    "I live in Dublin.",
+    "Simple personal answer."
+  ),
+  card(
+    "French",
+    "Ireland",
+    "Weather",
+    "Il pleut souvent en Irlande.",
+    "It often rains in Ireland.",
+    "Likely comparison."
+  ),
+  card(
+    "French",
+    "Ireland",
+    "Greenery",
+    "Il y a beaucoup de verdure.",
+    "There is a lot of greenery.",
+    "Useful description."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Family size",
+    "Vous avez une grande famille.",
+    "You have a big family.",
+    "Useful with family photos."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Who is that",
+    "C’est qui ?",
+    "Who is that?",
+    "Useful with family photos."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Andy child",
+    "C’est Andy quand il était petit ?",
+    "Is that Andy when he was little?",
+    "Family-photo phrase."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Andy child",
+    "Il était comment quand il était petit ?",
+    "What was he like when he was little?",
+    "Good family question."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Reaction",
+    "Ah oui ? Ça ne m’étonne pas !",
+    "Oh really? That does not surprise me!",
+    "Warm/funny reaction."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Compliment",
+    "Il était mignon.",
+    "He was cute.",
+    "For childhood photos."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Compliment",
+    "Elle est très belle.",
+    "She is very beautiful.",
+    "For family photos."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Residence",
+    "Vous habitez ici ?",
+    "Do you live here?",
+    "Polite question."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Residence",
+    "Vous avez toujours habité à Maurice ?",
+    "Have you always lived in Mauritius?",
+    "Lets people tell stories."
+  ),
+  card(
+    "French",
+    "Family French",
+    "Work",
+    "Et vous, vous faites quoi dans la vie ?",
+    "And you, what do you do?",
+    "Good reciprocal question."
+  ),
+  card(
+    "French",
+    "Andy",
+    "Meeting Andy",
+    "On s’est rencontrés en Irlande.",
+    "We met in Ireland.",
+    "Relationship explanation."
+  ),
+  card(
+    "French",
+    "Andy",
+    "Andy kindness",
+    "Il est très gentil avec moi.",
+    "He is very kind to me.",
+    "Family-safe phrase."
+  ),
+  card(
+    "French",
+    "Andy",
+    "Care",
+    "Il prend soin de moi.",
+    "He takes care of me.",
+    "Warm phrase."
+  ),
+  card(
+    "French",
+    "Andy",
+    "Happiness",
+    "Je suis très heureuse avec lui.",
+    "I am very happy with him.",
+    "Feminine: heureuse."
+  )
+);
+
+starterData.questions.push(
+  q(
+    "French",
+    "Ireland",
+    "Origin",
+    "Tu viens d’où ?",
+    "Where are you from?",
+    [
+      ["Je viens d’Irlande.", "I come from Ireland."],
+      ["Je suis irlandaise.", "I am Irish."]
+    ],
+    "Very common question."
+  ),
+  q(
+    "French",
+    "Ireland",
+    "Dublin",
+    "Tu habites où ?",
+    "Where do you live?",
+    [
+      ["J’habite à Dublin.", "I live in Dublin."],
+      ["J’habite en Irlande.", "I live in Ireland."]
+    ],
+    "Basic personal question."
+  ),
+  q(
+    "French",
+    "Ireland",
+    "Ireland description",
+    "Comment est l’Irlande ?",
+    "What is Ireland like?",
+    [
+      ["L’Irlande est très belle. Il y a beaucoup de verdure.", "Ireland is very beautiful. There is a lot of greenery."],
+      ["Il pleut souvent, mais c’est très beau.", "It rains often, but it is very beautiful."]
+    ],
+    "Family comparison question."
+  ),
+  q(
+    "French",
+    "Family French",
+    "Residence",
+    "Vous habitez ici ?",
+    "Do you live here?",
+    [
+      ["Ah d’accord. C’est très beau ici.", "Ah okay. It is very beautiful here."],
+      ["Vous avez toujours habité à Maurice ?", "Have you always lived in Mauritius?"]
+    ],
+    "Useful with relatives."
+  ),
+  q(
+    "French",
+    "Family French",
+    "Andy child",
+    "Andy était comment quand il était petit ?",
+    "What was Andy like when he was little?",
+    [
+      ["Ah oui ? Ça ne m’étonne pas !", "Oh really? That does not surprise me!"],
+      ["Oui, ça je peux imaginer.", "Yes, I can imagine that."]
+    ],
+    "Good family-photo moment."
+  ),
+  q(
+    "French",
+    "Family French",
+    "Photos",
+    "Tu veux voir les photos ?",
+    "Do you want to see the photos?",
+    [
+      ["Oui, avec plaisir.", "Yes, gladly."],
+      ["Oui, j’aimerais beaucoup.", "Yes, I would really like that."]
+    ],
+    "Family-photo question."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Ireland",
+    "Talking about Ireland",
+    [
+      ["Family", "Comment est l’Irlande ?", "What is Ireland like?"],
+      ["Suzanne", "L’Irlande est très belle. Il y a beaucoup de verdure.", "Ireland is very beautiful. There is a lot of greenery."],
+      ["Family", "Il fait froid ?", "Is it cold?"],
+      ["Suzanne", "Oui, souvent. Il pleut beaucoup aussi.", "Yes, often. It rains a lot too."],
+      ["Family", "Et Maurice ?", "And Mauritius?"],
+      ["Suzanne", "Maurice est très différente, mais j’aime beaucoup.", "Mauritius is very different, but I like it very much."]
+    ]
+  ),
+  dlg(
+    "Andy",
+    "Talking about Andy",
+    [
+      ["Family", "Comment tu as rencontré Andy ?", "How did you meet Andy?"],
+      ["Suzanne", "On s’est rencontrés en Irlande.", "We met in Ireland."],
+      ["Family", "Il est gentil avec toi ?", "Is he kind to you?"],
+      ["Suzanne", "Oui, très gentil. Il prend soin de moi.", "Yes, very kind. He takes care of me."],
+      ["Family", "Tu es heureuse avec lui ?", "Are you happy with him?"],
+      ["Suzanne", "Oui, très heureuse.", "Yes, very happy."]
+    ]
+  ),
+  dlg(
+    "Family French",
+    "Looking at family photos",
+    [
+      ["Family", "Regarde, c’est Andy quand il était petit.", "Look, this is Andy when he was little."],
+      ["Suzanne", "Oh, il était mignon !", "Oh, he was cute!"],
+      ["Family", "Ici, c’est sa grand-mère.", "Here, this is his grandmother."],
+      ["Suzanne", "Elle est très belle.", "She is very beautiful."],
+      ["Family", "Et là, c’est toute la famille.", "And there, this is the whole family."],
+      ["Suzanne", "Vous avez une grande famille.", "You have a big family."]
+    ]
+  ),
+  dlg(
+    "Family French",
+    "Asking about Andy as a child",
+    [
+      ["Suzanne", "Andy était comment quand il était petit ?", "What was Andy like when he was little?"],
+      ["Family", "Il était très calme / très intelligent / très têtu.", "He was very calm / very intelligent / very stubborn."],
+      ["Suzanne", "Ah oui ? Ça ne m’étonne pas !", "Oh really? That does not surprise me!"],
+      ["Family", "Il travaillait beaucoup à l’école.", "He worked a lot at school."],
+      ["Suzanne", "Oui, ça je peux imaginer.", "Yes, I can imagine that."]
+    ]
+  ),
+  dlg(
+    "Family French",
+    "Asking relatives questions",
+    [
+      ["Suzanne", "Vous habitez ici ?", "Do you live here?"],
+      ["Family", "Oui, j’habite à Beau Bassin.", "Yes, I live in Beau Bassin."],
+      ["Suzanne", "Ah d’accord. Vous avez toujours habité à Maurice ?", "Ah okay. Have you always lived in Mauritius?"],
+      ["Family", "Oui, presque toujours.", "Yes, almost always."],
+      ["Suzanne", "C’est très beau ici.", "It is very beautiful here."]
+    ]
+  )
+);
+
+
+// ========================================
+// CONTENT CHUNK 6 — ROMANCE AND AFFECTION
+// ========================================
+
+starterData.cards.push(
+  card(
+    "French",
+    "Romance and Affection",
+    "Love",
+    "Je t’aime.",
+    "I love you.",
+    "Direct and intimate."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Love",
+    "Je t’aime beaucoup.",
+    "I love you very much.",
+    "Soft and common."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Love",
+    "Je suis amoureuse de toi.",
+    "I am in love with you.",
+    "Said by Suzanne."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Missing",
+    "Tu me manques.",
+    "I miss you.",
+    "French expresses this backwards."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Missing",
+    "J’ai hâte de te voir.",
+    "I can’t wait to see you.",
+    "Useful when apart."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Thinking",
+    "Je pense à toi.",
+    "I am thinking of you.",
+    "Message phrase."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Compliments",
+    "Tu es beau.",
+    "You are handsome.",
+    "Said to Andy."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Compliments",
+    "Tu es très attirant.",
+    "You are very attractive.",
+    "Romantic compliment."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Compliments",
+    "J’aime ton sourire.",
+    "I like your smile.",
+    "Romantic compliment."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Compliments",
+    "J’aime tes yeux.",
+    "I like your eyes.",
+    "Romantic compliment."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Compliments",
+    "Tu me fais rire.",
+    "You make me laugh.",
+    "Warm and natural."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Feeling",
+    "Je me sens bien avec toi.",
+    "I feel good with you.",
+    "Meaningful phrase."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Happiness",
+    "Tu me rends heureuse.",
+    "You make me happy.",
+    "Feminine: heureuse."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Importance",
+    "Tu comptes beaucoup pour moi.",
+    "You mean a lot to me.",
+    "Serious romantic phrase."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Support",
+    "Je suis là pour toi.",
+    "I am here for you.",
+    "Supportive phrase."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Endearments",
+    "mon amour",
+    "my love",
+    "Classic term of endearment."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Endearments",
+    "mon cœur",
+    "my heart / darling",
+    "Common affectionate term."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Endearments",
+    "mon chéri",
+    "my darling",
+    "Said to a man."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Endearments",
+    "mon ange",
+    "my angel",
+    "Tender phrase."
+  ),
+  card(
+    "French",
+    "Romance and Affection",
+    "Endearments",
+    "bébé",
+    "baby",
+    "Informal affectionate word."
+  )
+);
+
+starterData.questions.push(
+  q(
+    "French",
+    "Romance and Affection",
+    "Love",
+    "Tu m’aimes ?",
+    "Do you love me?",
+    [
+      ["Oui, je t’aime beaucoup.", "Yes, I love you very much."],
+      ["Oui, je suis amoureuse de toi.", "Yes, I am in love with you."]
+    ],
+    "Romantic question from Andy."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Missing",
+    "Je te manque ?",
+    "Do you miss me?",
+    [
+      ["Oui, tu me manques.", "Yes, I miss you."],
+      ["Oui, j’ai hâte de te voir.", "Yes, I can’t wait to see you."]
+    ],
+    "Useful when apart."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Compliments",
+    "Qu’est-ce que tu aimes chez moi ?",
+    "What do you like about me?",
+    [
+      ["J’aime ton sourire.", "I like your smile."],
+      ["J’aime tes yeux et ton humour.", "I like your eyes and your humour."]
+    ],
+    "Compliment drill."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Feeling",
+    "Tu te sens bien avec moi ?",
+    "Do you feel good with me?",
+    [
+      ["Oui, je me sens très bien avec toi.", "Yes, I feel very good with you."],
+      ["Oui, tu me rends heureuse.", "Yes, you make me happy."]
+    ],
+    "Warm relationship phrase."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Romance and Affection",
+    "Speaking affectionately to Andy",
+    [
+      ["Andy", "Tu m’aimes ?", "Do you love me?"],
+      ["Suzanne", "Oui, je t’aime beaucoup, mon amour.", "Yes, I love you very much, my love."],
+      ["Andy", "Qu’est-ce que tu aimes chez moi ?", "What do you like about me?"],
+      ["Suzanne", "J’aime ton sourire, tes yeux, et ton humour.", "I like your smile, your eyes, and your humour."],
+      ["Suzanne", "Je me sens bien avec toi.", "I feel good with you."]
+    ]
+  ),
+  dlg(
+    "Romance and Affection",
+    "Missing Andy",
+    [
+      ["Andy", "Je te manque ?", "Do you miss me?"],
+      ["Suzanne", "Oui, tu me manques.", "Yes, I miss you."],
+      ["Andy", "Tu as hâte de me voir ?", "Can’t wait to see me?"],
+      ["Suzanne", "Oui, j’ai hâte de te voir.", "Yes, I can’t wait to see you."],
+      ["Suzanne", "Je pense à toi.", "I am thinking of you."]
+    ]
+  )
+);
+
+
+// =================================
+// CONTENT CHUNK 7 — GYM AND ANATOMY
+// =================================
+
+starterData.cards.push(
+  card("French", "Gym and Anatomy", "Training", "Je suis allée à la salle.", "I went to the gym.", "Feminine: allée."),
+  card("French", "Gym and Anatomy", "Training", "J’ai fait une séance de jambes.", "I trained legs.", "Natural gym phrase."),
+  card("French", "Gym and Anatomy", "Training", "J’ai travaillé les fessiers.", "I trained glutes.", "Precise gym phrase."),
+  card("French", "Gym and Anatomy", "Training", "J’ai travaillé le haut du corps.", "I trained upper body.", "Gym phrase."),
+  card("French", "Gym and Anatomy", "Training", "J’ai fait du cardio.", "I did cardio.", "Common phrase."),
+  card("French", "Gym and Anatomy", "Training", "J’ai soulevé des poids.", "I lifted weights.", "Gym phrase."),
+  card("French", "Gym and Anatomy", "Training", "J’ai fait des squats.", "I did squats.", "Gym phrase."),
+
+  card("French", "Gym and Anatomy", "Soreness", "J’ai mal aux jambes.", "My legs hurt.", "Post-gym."),
+  card("French", "Gym and Anatomy", "Soreness", "J’ai mal aux fessiers.", "My glutes are sore.", "Post-gym."),
+  card("French", "Gym and Anatomy", "Soreness", "J’ai mal au dos.", "My back hurts.", "Pain phrase."),
+  card("French", "Gym and Anatomy", "Soreness", "J’ai des courbatures.", "I have muscle soreness.", "General soreness."),
+  card("French", "Gym and Anatomy", "Soreness", "Mes jambes sont fatiguées.", "My legs are tired.", "Natural phrase."),
+
+  card("French", "Gym and Anatomy", "Recovery", "Je suis fatiguée.", "I am tired.", "Feminine: fatiguée."),
+  card("French", "Gym and Anatomy", "Recovery", "J’ai besoin de dormir.", "I need to sleep.", "Recovery phrase."),
+  card("French", "Gym and Anatomy", "Recovery", "J’ai besoin de manger.", "I need to eat.", "Recovery phrase."),
+  card("French", "Gym and Anatomy", "Recovery", "J’ai besoin de protéines.", "I need protein.", "Gym/recovery phrase."),
+  card("French", "Gym and Anatomy", "Recovery", "Je dois récupérer.", "I need to recover.", "Post-gym."),
+  card("French", "Gym and Anatomy", "Recovery", "Je vais prendre une douche.", "I am going to take a shower.", "Post-gym."),
+
+  card("French", "Gym and Anatomy", "Body parts", "les jambes", "legs", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "les fessiers", "glutes", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "les bras", "arms", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "les épaules", "shoulders", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "le dos", "back", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "le ventre", "stomach / belly", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "la poitrine", "chest", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "les abdos", "abs", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "la tête", "head", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "les pieds", "feet", "Body part."),
+  card("French", "Gym and Anatomy", "Body parts", "les mains", "hands", "Body part.")
+);
+
+starterData.questions.push(
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Training",
+    "Tu as entraîné quoi aujourd’hui ?",
+    "What did you train today?",
+    [
+      ["J’ai fait une séance de jambes.", "I trained legs."],
+      ["J’ai travaillé les fessiers.", "I trained glutes."]
+    ],
+    "Gym question."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Soreness",
+    "Tu as mal où ?",
+    "Where does it hurt?",
+    [
+      ["J’ai mal aux jambes.", "My legs hurt."],
+      ["J’ai mal aux fessiers.", "My glutes are sore."]
+    ],
+    "Pain question."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Tiredness",
+    "Tu es fatiguée ?",
+    "Are you tired?",
+    [
+      ["Oui, je suis fatiguée. Je dois récupérer.", "Yes, I am tired. I need to recover."],
+      ["Oui, j’ai besoin de manger et de dormir.", "Yes, I need to eat and sleep."]
+    ],
+    "Post-gym."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Recovery",
+    "Tu as besoin de quoi après la salle ?",
+    "What do you need after the gym?",
+    [
+      ["J’ai besoin de protéines.", "I need protein."],
+      ["J’ai besoin de manger, de boire, et de dormir.", "I need to eat, drink, and sleep."]
+    ],
+    "Recovery question."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Gym and Anatomy",
+    "After the gym",
+    [
+      ["Andy", "Tu as entraîné quoi aujourd’hui ?", "What did you train today?"],
+      ["Suzanne", "J’ai fait une séance de jambes.", "I trained legs."],
+      ["Andy", "Tu es fatiguée ?", "Are you tired?"],
+      ["Suzanne", "Oui, mes jambes sont fatiguées et j’ai mal aux fessiers.", "Yes, my legs are tired and my glutes are sore."],
+      ["Suzanne", "J’ai besoin de protéines, de manger, et de dormir.", "I need protein, food, and sleep."]
+    ]
+  ),
+  dlg(
+    "Gym and Anatomy",
+    "Soreness and recovery",
+    [
+      ["Andy", "Tu as mal où ?", "Where does it hurt?"],
+      ["Suzanne", "J’ai mal aux jambes et aux fessiers.", "My legs and glutes hurt."],
+      ["Andy", "Tu veux te reposer ?", "Do you want to rest?"],
+      ["Suzanne", "Oui, je dois récupérer.", "Yes, I need to recover."],
+      ["Suzanne", "Je vais prendre une douche et dormir.", "I am going to take a shower and sleep."]
+    ]
+  )
+);
+
+// ==========================================
+// CONTENT CHUNK 8 — FRUITS AND COLOURS
+// ==========================================
+
+starterData.cards.push(
+  // Fruits
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "la mangue",
+    "mango",
+    "Common fruit in Mauritius."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "l’ananas",
+    "pineapple",
+    "Masculine but uses l’ before vowel."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "la banane",
+    "banana",
+    "Fruit vocabulary."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "la papaye",
+    "papaya",
+    "Fruit vocabulary."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "le letchi",
+    "lychee",
+    "Common in Mauritius when in season."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "la goyave",
+    "guava",
+    "Fruit vocabulary."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "le fruit de la passion",
+    "passion fruit",
+    "Useful fruit phrase."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "la noix de coco",
+    "coconut",
+    "Fruit vocabulary."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "la pastèque",
+    "watermelon",
+    "Fruit vocabulary."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "la pomme d’amour",
+    "tomato",
+    "Mauritian/French local usage for tomato."
+  ),
+
+  // Fruit descriptions
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruit descriptions",
+    "C’est sucré.",
+    "It is sweet.",
+    "Useful when tasting fruit."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruit descriptions",
+    "C’est juteux.",
+    "It is juicy.",
+    "Useful when tasting fruit."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruit descriptions",
+    "C’est mûr.",
+    "It is ripe.",
+    "Fruit description."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruit descriptions",
+    "Ce n’est pas encore mûr.",
+    "It is not ripe yet.",
+    "Useful fruit phrase."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruit descriptions",
+    "C’est acide.",
+    "It is sour.",
+    "Taste description."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruit descriptions",
+    "C’est très frais.",
+    "It is very fresh.",
+    "Taste description."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruit descriptions",
+    "J’aime beaucoup ce fruit.",
+    "I like this fruit very much.",
+    "Simple preference phrase."
+  ),
+
+  // Colours
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "rouge",
+    "red",
+    "Colour."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "bleu / bleue",
+    "blue",
+    "Masculine/feminine."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "jaune",
+    "yellow",
+    "Colour."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "vert / verte",
+    "green",
+    "Masculine/feminine."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "orange",
+    "orange",
+    "Colour."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "rose",
+    "pink",
+    "Colour."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "violet / violette",
+    "purple",
+    "Masculine/feminine."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "noir / noire",
+    "black",
+    "Masculine/feminine."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "blanc / blanche",
+    "white",
+    "Masculine/feminine."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "marron",
+    "brown",
+    "Colour."
+  ),
+  card(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "gris / grise",
+    "grey",
+    "Masculine/feminine."
+  )
+);
+
+starterData.questions.push(
+  q(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruits",
+    "Tu veux quel fruit ?",
+    "Which fruit do you want?",
+    [
+      ["Je veux une mangue, s’il vous plaît.", "I want a mango, please."],
+      ["Je veux de l’ananas, merci.", "I want pineapple, thank you."]
+    ],
+    "Fruit choice question."
+  ),
+  q(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Fruit descriptions",
+    "C’est bon ?",
+    "Is it good?",
+    [
+      ["Oui, c’est très sucré.", "Yes, it is very sweet."],
+      ["Oui, c’est très juteux.", "Yes, it is very juicy."]
+    ],
+    "Fruit tasting question."
+  ),
+  q(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "C’est quelle couleur ?",
+    "What colour is it?",
+    [
+      ["C’est rouge.", "It is red."],
+      ["C’est jaune.", "It is yellow."]
+    ],
+    "Colour recognition."
+  ),
+  q(
+    "French",
+    "Mauritian Fruits and Colours",
+    "Colours",
+    "Tu préfères le rouge ou le bleu ?",
+    "Do you prefer red or blue?",
+    [
+      ["Je préfère le bleu.", "I prefer blue."],
+      ["Je préfère le rouge.", "I prefer red."]
+    ],
+    "Preference question."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Mauritian Fruits and Colours",
+    "Choosing fruit",
+    [
+      ["Family", "Tu veux quel fruit ?", "Which fruit do you want?"],
+      ["Suzanne", "Je veux une mangue, s’il vous plaît.", "I want a mango, please."],
+      ["Family", "Elle est bonne ?", "Is it good?"],
+      ["Suzanne", "Oui, elle est très sucrée et juteuse.", "Yes, it is very sweet and juicy."],
+      ["Family", "Tu aimes les fruits de Maurice ?", "Do you like Mauritian fruits?"],
+      ["Suzanne", "Oui, beaucoup. Ils sont délicieux.", "Yes, very much. They are delicious."]
+    ]
+  ),
+  dlg(
+    "Mauritian Fruits and Colours",
+    "Colours and clothes",
+    [
+      ["Family", "Tu aimes cette couleur ?", "Do you like this colour?"],
+      ["Suzanne", "Oui, j’aime beaucoup cette couleur.", "Yes, I like this colour very much."],
+      ["Family", "Tu préfères le rouge ou le bleu ?", "Do you prefer red or blue?"],
+      ["Suzanne", "Je préfère le bleu.", "I prefer blue."],
+      ["Suzanne", "C’est très joli.", "It is very pretty."]
+    ]
+  )
+);
+
+// =================================
+// CONTENT CHUNK 9 — FAITH AND CHURCH
+// =================================
+
+starterData.cards.push(
+  card(
+    "French",
+    "Faith and Church",
+    "Catholic identity",
+    "Je suis catholique.",
+    "I am Catholic.",
+    "Basic faith phrase."
+  ),
+  card(
+    "French",
+    "Faith and Church",
+    "Faith",
+    "Ma foi est très importante pour moi.",
+    "My faith is very important to me.",
+    "Useful family phrase."
+  ),
+  card(
+    "French",
+    "Faith and Church",
+    "Mass",
+    "Nous allons à la messe ensemble.",
+    "We go to Mass together.",
+    "Simple shared-faith phrase."
+  ),
+  card(
+    "French",
+    "Faith and Church",
+    "Mass",
+    "On va à la messe aujourd’hui ?",
+    "Are we going to Mass today?",
+    "Practical question."
+  ),
+  card(
+    "French",
+    "Faith and Church",
+    "Mass time",
+    "À quelle heure est la messe ?",
+    "What time is Mass?",
+    "Very practical."
+  ),
+  card(
+    "French",
+    "Faith and Church",
+    "Church",
+    "J’aime cette église.",
+    "I like this church.",
+    "Simple church phrase."
+  ),
+  card(
+    "French",
+    "Faith and Church",
+    "Beauty",
+    "C’était très beau.",
+    "That was very beautiful.",
+    "Useful after Mass."
+  ),
+  card(
+    "French",
+    "Faith and Church",
+    "Prayer",
+    "Je vais prier.",
+    "I am going to pray.",
+    "Simple faith phrase."
+  ),
+  card(
+    "French",
+    "Faith and Church",
+    "Careful",
+    "Merci, je vais faire attention.",
+    "Thank you, I will be careful.",
+    "Useful if someone gives advice."
+  )
+);
+
+starterData.questions.push(
+  q(
+    "French",
+    "Faith and Church",
+    "Catholic identity",
+    "Tu es catholique ?",
+    "Are you Catholic?",
+    [
+      ["Oui, je suis catholique.", "Yes, I am Catholic."],
+      ["Oui, ma foi est très importante pour moi.", "Yes, my faith is very important to me."]
+    ],
+    "Likely question in a Catholic family context."
+  ),
+  q(
+    "French",
+    "Faith and Church",
+    "Mass",
+    "Vous allez à la messe ensemble ?",
+    "Do you go to Mass together?",
+    [
+      ["Oui, nous allons à la messe ensemble.", "Yes, we go to Mass together."],
+      ["Oui, c’est important pour nous.", "Yes, it is important to us."]
+    ],
+    "Faith conversation."
+  ),
+  q(
+    "French",
+    "Faith and Church",
+    "Mass time",
+    "À quelle heure est la messe ?",
+    "What time is Mass?",
+    [
+      ["La messe est à dix heures.", "Mass is at ten."],
+      ["Je ne sais pas. Andy peut vérifier.", "I don’t know. Andy can check."]
+    ],
+    "Practical Mass question."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Faith and Church",
+    "Talking about faith",
+    [
+      ["Family", "Tu es catholique ?", "Are you Catholic?"],
+      ["Suzanne", "Oui, je suis catholique.", "Yes, I am Catholic."],
+      ["Family", "Vous allez à la messe ensemble ?", "Do you go to Mass together?"],
+      ["Suzanne", "Oui, nous allons à la messe ensemble.", "Yes, we go to Mass together."],
+      ["Suzanne", "Ma foi est très importante pour moi.", "My faith is very important to me."]
+    ]
+  ),
+  dlg(
+    "Faith and Church",
+    "Going to Mass",
+    [
+      ["Suzanne", "À quelle heure est la messe ?", "What time is Mass?"],
+      ["Andy", "La messe est à dix heures.", "Mass is at ten."],
+      ["Suzanne", "D’accord. Je vais me préparer.", "Okay. I am going to get ready."],
+      ["Andy", "Tu veux partir à quelle heure ?", "What time do you want to leave?"],
+      ["Suzanne", "On peut partir un peu plus tôt ?", "Can we leave a little earlier?"]
+    ]
+  )
+);
+
+// ================================
+// CONTENT CHUNK 10 — KREOL SUPPORT
+// ================================
+
+starterData.cards.push(
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Understanding",
+    "Mo pa konpran.",
+    "I don’t understand.",
+    "Essential emergency phrase."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Speak slowly",
+    "Koz pli dousman, silteple.",
+    "Speak more slowly, please.",
+    "Useful if someone switches to Kreol."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Translation",
+    "Andy kapav tradir ?",
+    "Can Andy translate?",
+    "Useful when lost."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Food",
+    "Enn tigit, silteple.",
+    "A little bit, please.",
+    "Useful at table."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Thanks",
+    "Mersi.",
+    "Thank you.",
+    "Basic."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Thanks",
+    "Mersi boukou.",
+    "Thank you very much.",
+    "Warm phrase."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Happiness",
+    "Mo bien kontan isi.",
+    "I am very happy here.",
+    "Warm phrase."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Kindness",
+    "Zot bien zanti.",
+    "You are all very kind.",
+    "Useful with family."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Heat",
+    "Fer bien so.",
+    "It is very hot.",
+    "Mauritius phrase."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Water",
+    "Mo bizin delo.",
+    "I need water.",
+    "Practical phrase."
+  ),
+  card(
+    "Kreol",
+    "Kreol Support",
+    "Food compliment",
+    "Sa bien bon.",
+    "This is very good.",
+    "Useful at table."
+  )
+);
+
+starterData.questions.push(
+  q(
+    "Kreol",
+    "Kreol Support",
+    "Understanding",
+    "To konpran ?",
+    "Do you understand?",
+    [
+      ["Mo konpran enn tigit.", "I understand a little."],
+      ["Mo pa konpran. Andy kapav tradir ?", "I don’t understand. Can Andy translate?"]
+    ],
+    "Basic Kreol comprehension."
+  ),
+  q(
+    "Kreol",
+    "Kreol Support",
+    "Food",
+    "To anvi ankor manze ?",
+    "Do you want more food?",
+    [
+      ["Enn tigit, mersi.", "A little bit, thank you."],
+      ["Non mersi, mo finn bien manze.", "No thank you, I have eaten well."]
+    ],
+    "Useful at table."
+  ),
+  q(
+    "Kreol",
+    "Kreol Support",
+    "Heat",
+    "Fer so ?",
+    "Is it hot?",
+    [
+      ["Wi, fer bien so.", "Yes, it is very hot."],
+      ["Wi, mo bizin delo.", "Yes, I need water."]
+    ],
+    "Simple Mauritius question."
+  )
+);
+
+starterData.dialogues.push(
+  dlg(
+    "Kreol Support",
+    "Kreol food support",
+    [
+      ["Family", "To anvi ankor manze ?", "Do you want more food?"],
+      ["Suzanne", "Enn tigit, mersi.", "A little bit, thank you."],
+      ["Family", "Ankor kari ?", "More curry?"],
+      ["Suzanne", "Non mersi, mo finn bien manze.", "No thank you, I have eaten well."],
+      ["Suzanne", "Sa bien bon.", "This is very good."]
+    ]
+  ),
+  dlg(
+    "Kreol Support",
+    "Lost in Kreol",
+    [
+      ["Family", "To konpran ?", "Do you understand?"],
+      ["Suzanne", "Mo konpran enn tigit.", "I understand a little."],
+      ["Family", "Nou koz pli dousman.", "We will speak more slowly."],
+      ["Suzanne", "Mersi boukou. Andy kapav tradir ?", "Thank you very much. Can Andy translate?"]
+    ]
+  )
+);
+
+// =====================================================
+// CONTENT CHUNK 11 — EXTRA PRACTICE: SURVIVAL / FOOD / MAURITIUS
+// =====================================================
+
+starterData.questions.push(
+  // -------------------------
+  // Survival French
+  // -------------------------
+  q(
+    "French",
+    "Survival French",
+    "Forgotten word",
+    "Tu as oublié le mot ?",
+    "Did you forget the word?",
+    [
+      ["Oui, j’ai oublié le mot.", "Yes, I forgot the word."],
+      ["Oui, comment on dit ça en français ?", "Yes, how do you say that in French?"]
+    ],
+    "Useful repair phrase."
+  ),
+  q(
+    "French",
+    "Survival French",
+    "How to say",
+    "Comment on dit ça en français ?",
+    "How do you say that in French?",
+    [
+      ["Je ne sais pas. Andy peut traduire ?", "I do not know. Can Andy translate?"],
+      ["Vous pouvez l’écrire, s’il vous plaît ?", "Can you write it, please?"]
+    ],
+    "Useful when learning."
+  ),
+  q(
+    "French",
+    "Survival French",
+    "Write it",
+    "Vous pouvez l’écrire ?",
+    "Can you write it?",
+    [
+      ["Oui, s’il vous plaît. Ça m’aide beaucoup.", "Yes, please. That helps me a lot."],
+      ["Merci, je comprends mieux quand je lis.", "Thank you, I understand better when I read."]
+    ],
+    "Good practical phrase."
+  ),
+  q(
+    "French",
+    "Survival French",
+    "Too fast",
+    "Je parle trop vite ?",
+    "Am I speaking too fast?",
+    [
+      ["Un petit peu. Vous pouvez parler plus lentement ?", "A little bit. Can you speak more slowly?"],
+      ["Oui, un peu. Je comprends mieux lentement.", "Yes, a little. I understand better slowly."]
+    ],
+    "Family may ask this."
+  ),
+  q(
+    "French",
+    "Survival French",
+    "Need Andy",
+    "Tu veux qu’Andy traduise ?",
+    "Do you want Andy to translate?",
+    [
+      ["Oui, s’il vous plaît. Je suis un peu perdue.", "Yes, please. I am a little lost."],
+      ["Oui, juste cette phrase.", "Yes, just this sentence."]
+    ],
+    "Useful when conversation gets too fast."
+  ),
+
+  // -------------------------
+  // Food and Table Talk
+  // -------------------------
+  q(
+    "French",
+    "Food and Table Talk",
+    "Enough food",
+    "Tu as assez mangé ?",
+    "Have you eaten enough?",
+    [
+      ["Oui, merci. J’ai très bien mangé.", "Yes, thank you. I ate very well."],
+      ["Oui, c’était délicieux.", "Yes, it was delicious."]
+    ],
+    "Common family meal question."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "Want tea",
+    "Tu veux du thé ?",
+    "Do you want tea?",
+    [
+      ["Oui, avec plaisir.", "Yes, gladly."],
+      ["Oui, merci. C’est très gentil.", "Yes, thank you. That is very kind."]
+    ],
+    "Very likely."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "Want cake",
+    "Tu veux un gâteau ?",
+    "Do you want cake/a snack?",
+    [
+      ["Oui, merci. Juste un petit morceau.", "Yes, thank you. Just a small piece."],
+      ["Non merci, j’ai bien mangé.", "No thank you, I ate well."]
+    ],
+    "Useful for snacks."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "What is it",
+    "Tu sais ce que c’est ?",
+    "Do you know what it is?",
+    [
+      ["Non, qu’est-ce que c’est ?", "No, what is it?"],
+      ["Pas encore. Je veux goûter.", "Not yet. I want to try."]
+    ],
+    "Useful when trying new food."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "Do you like it",
+    "Tu aimes ça ?",
+    "Do you like it?",
+    [
+      ["Oui, j’aime beaucoup.", "Yes, I like it very much."],
+      ["Oui, c’est très bon.", "Yes, it is very good."]
+    ],
+    "Useful food response."
+  ),
+  q(
+    "French",
+    "Food and Table Talk",
+    "Too spicy",
+    "C’est trop pimenté ?",
+    "Is it too spicy?",
+    [
+      ["Un peu, mais ça va.", "A little, but it is okay."],
+      ["Oui, un peu. Je ne suis pas habituée.", "Yes, a little. I am not used to it."]
+    ],
+    "Important in Mauritius."
+  ),
+
+  // -------------------------
+  // Mauritius Practical
+  // -------------------------
+  q(
+    "French",
+    "Mauritius",
+    "Going out",
+    "On va où ?",
+    "Where are we going?",
+    [
+      ["D’accord. C’est loin ?", "Okay. Is it far?"],
+      ["D’accord. Ça prend combien de temps ?", "Okay. How long does it take?"]
+    ],
+    "Transport/outings."
+  ),
+  q(
+    "French",
+    "Mauritius",
+    "Distance",
+    "C’est loin ?",
+    "Is it far?",
+    [
+      ["Ça prend combien de temps ?", "How long does it take?"],
+      ["D’accord. Je vais prendre de l’eau.", "Okay. I am going to take water."]
+    ],
+    "Useful in car."
+  ),
+  q(
+    "French",
+    "Mauritius",
+    "Sun cream",
+    "Tu as mis de la crème solaire ?",
+    "Did you put on sun cream?",
+    [
+      ["Pas encore. J’ai besoin de crème solaire.", "Not yet. I need sun cream."],
+      ["Oui, merci. Je vais faire attention.", "Yes, thank you. I will be careful."]
+    ],
+    "Very practical."
+  ),
+  q(
+    "French",
+    "Mauritius",
+    "Mosquitoes",
+    "Il y a des moustiques ?",
+    "Are there mosquitoes?",
+    [
+      ["J’ai besoin d’anti-moustique.", "I need mosquito repellent."],
+      ["Ah d’accord. Je vais faire attention.", "Ah okay. I will be careful."]
+    ],
+    "Evening practical phrase."
+  ),
+  q(
+    "French",
+    "Mauritius",
+    "Rest",
+    "Tu veux te reposer ?",
+    "Do you want to rest?",
+    [
+      ["Oui, je vais me reposer un peu.", "Yes, I am going to rest a little."],
+      ["Oui, je suis un peu fatiguée.", "Yes, I am a little tired."]
+    ],
+    "Polite exit."
+  )
+);
+
+
+// =====================================================
+// CONTENT CHUNK 12 — EXTRA PRACTICE: ROMANCE AND GYM
+// =====================================================
+
+starterData.questions.push(
+  // -------------------------
+  // Romance and Affection
+  // -------------------------
+  q(
+    "French",
+    "Romance and Affection",
+    "Love",
+    "Tu penses à moi ?",
+    "Are you thinking of me?",
+    [
+      ["Oui, je pense à toi.", "Yes, I am thinking of you."],
+      ["Oui, je pense souvent à toi.", "Yes, I often think of you."]
+    ],
+    "Romantic message-style question."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Compliments",
+    "Tu me trouves beau ?",
+    "Do you find me handsome?",
+    [
+      ["Oui, tu es très beau.", "Yes, you are very handsome."],
+      ["Oui, tu es très attirant.", "Yes, you are very attractive."]
+    ],
+    "Compliment drill."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Smile",
+    "Tu aimes mon sourire ?",
+    "Do you like my smile?",
+    [
+      ["Oui, j’aime ton sourire.", "Yes, I like your smile."],
+      ["Oui, ton sourire me rend heureuse.", "Yes, your smile makes me happy."]
+    ],
+    "Romantic phrase."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Eyes",
+    "Tu aimes mes yeux ?",
+    "Do you like my eyes?",
+    [
+      ["Oui, j’aime tes yeux.", "Yes, I like your eyes."],
+      ["Oui, tes yeux sont très beaux.", "Yes, your eyes are very beautiful."]
+    ],
+    "Romantic phrase."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Feeling",
+    "Comment tu te sens avec moi ?",
+    "How do you feel with me?",
+    [
+      ["Je me sens bien avec toi.", "I feel good with you."],
+      ["Je me sens heureuse avec toi.", "I feel happy with you."]
+    ],
+    "Relationship phrase."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Happiness",
+    "Je te rends heureuse ?",
+    "Do I make you happy?",
+    [
+      ["Oui, tu me rends heureuse.", "Yes, you make me happy."],
+      ["Oui, tu comptes beaucoup pour moi.", "Yes, you mean a lot to me."]
+    ],
+    "Warm romantic response."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Support",
+    "Tu es là pour moi ?",
+    "Are you there for me?",
+    [
+      ["Oui, je suis là pour toi.", "Yes, I am here for you."],
+      ["Oui, mon amour, je suis là.", "Yes, my love, I am here."]
+    ],
+    "Supportive phrase."
+  ),
+  q(
+    "French",
+    "Romance and Affection",
+    "Endearments",
+    "Comment tu peux m’appeler affectueusement ?",
+    "How can you call me affectionately?",
+    [
+      ["Mon amour.", "My love."],
+      ["Mon chéri.", "My darling."]
+    ],
+    "Words of endearment."
+  ),
+
+  // -------------------------
+  // Gym and Anatomy
+  // -------------------------
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Gym",
+    "Tu es allée à la salle aujourd’hui ?",
+    "Did you go to the gym today?",
+    [
+      ["Oui, je suis allée à la salle.", "Yes, I went to the gym."],
+      ["Oui, j’ai fait une séance aujourd’hui.", "Yes, I did a session today."]
+    ],
+    "Gym routine question."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Training",
+    "Tu as fait du cardio ?",
+    "Did you do cardio?",
+    [
+      ["Oui, j’ai fait du cardio.", "Yes, I did cardio."],
+      ["Non, aujourd’hui j’ai travaillé les jambes.", "No, today I trained legs."]
+    ],
+    "Gym question."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Training",
+    "Tu as soulevé des poids ?",
+    "Did you lift weights?",
+    [
+      ["Oui, j’ai soulevé des poids.", "Yes, I lifted weights."],
+      ["Oui, mais pas trop lourd.", "Yes, but not too heavy."]
+    ],
+    "Gym phrase."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Training",
+    "Tu as fait des squats ?",
+    "Did you do squats?",
+    [
+      ["Oui, j’ai fait des squats.", "Yes, I did squats."],
+      ["Oui, et maintenant j’ai mal aux jambes.", "Yes, and now my legs hurt."]
+    ],
+    "Leg-day phrase."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Body parts",
+    "Qu’est-ce que tu as travaillé ?",
+    "What did you train?",
+    [
+      ["J’ai travaillé les jambes.", "I trained legs."],
+      ["J’ai travaillé les fessiers.", "I trained glutes."]
+    ],
+    "Body-part recall."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Body parts",
+    "Tu as travaillé le haut du corps ?",
+    "Did you train upper body?",
+    [
+      ["Oui, j’ai travaillé le haut du corps.", "Yes, I trained upper body."],
+      ["Non, aujourd’hui j’ai travaillé les jambes.", "No, today I trained legs."]
+    ],
+    "Gym split phrase."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Soreness",
+    "Tu as des courbatures ?",
+    "Do you have muscle soreness?",
+    [
+      ["Oui, j’ai des courbatures.", "Yes, I have muscle soreness."],
+      ["Oui, surtout aux jambes.", "Yes, especially in my legs."]
+    ],
+    "Very useful post-gym phrase."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Soreness",
+    "Ton dos te fait mal ?",
+    "Does your back hurt?",
+    [
+      ["Oui, j’ai mal au dos.", "Yes, my back hurts."],
+      ["Non, j’ai surtout mal aux jambes.", "No, mainly my legs hurt."]
+    ],
+    "Pain drill."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Recovery",
+    "Tu veux manger après la salle ?",
+    "Do you want to eat after the gym?",
+    [
+      ["Oui, j’ai besoin de manger.", "Yes, I need to eat."],
+      ["Oui, j’ai besoin de protéines.", "Yes, I need protein."]
+    ],
+    "Recovery phrase."
+  ),
+  q(
+    "French",
+    "Gym and Anatomy",
+    "Recovery",
+    "Tu vas faire quoi maintenant ?",
+    "What are you going to do now?",
+    [
+      ["Je vais prendre une douche.", "I am going to take a shower."],
+      ["Je vais me reposer un peu.", "I am going to rest a little."]
+    ],
+    "After-gym routine."
+  )
+);
+
+// =====================================================
+// CONTENT CHUNK 13 — EXTRA PRACTICE: FAMILY / IRELAND / ANDY
+// =====================================================
+
+starterData.questions.push(
+  // -------------------------
+  // Ireland
+  // -------------------------
+  q(
+    "French",
+    "Ireland",
+    "Weather",
+    "Il pleut beaucoup en Irlande ?",
+    "Does it rain a lot in Ireland?",
+    [
+      ["Oui, il pleut souvent.", "Yes, it often rains."],
+      ["Oui, mais l’Irlande est très belle.", "Yes, but Ireland is very beautiful."]
+    ],
+    "Likely family comparison."
+  ),
+  q(
+    "French",
+    "Ireland",
+    "Cold",
+    "Il fait froid en Irlande ?",
+    "Is it cold in Ireland?",
+    [
+      ["Oui, souvent. Il fait plus froid qu’à Maurice.", "Yes, often. It is colder than in Mauritius."],
+      ["Oui, mais on s’habitue.", "Yes, but you get used to it."]
+    ],
+    "Mauritius/Ireland comparison."
+  ),
+  q(
+    "French",
+    "Ireland",
+    "Dublin",
+    "Dublin est comment ?",
+    "What is Dublin like?",
+    [
+      ["Dublin est une belle ville.", "Dublin is a beautiful city."],
+      ["Dublin est agréable, mais il pleut souvent.", "Dublin is pleasant, but it often rains."]
+    ],
+    "Personal background question."
+  ),
+
+  // -------------------------
+  // Family French
+  // -------------------------
+  q(
+    "French",
+    "Family French",
+    "Family members",
+    "C’est qui ?",
+    "Who is that?",
+    [
+      ["C’est qui sur la photo ?", "Who is that in the photo?"],
+      ["C’est quelqu’un de la famille ?", "Is that someone from the family?"]
+    ],
+    "Useful when looking at photos."
+  ),
+  q(
+    "French",
+    "Family French",
+    "Family size",
+    "Tu trouves que la famille est grande ?",
+    "Do you think the family is big?",
+    [
+      ["Oui, vous avez une grande famille.", "Yes, you have a big family."],
+      ["Oui, c’est très beau de voir toute la famille.", "Yes, it is beautiful to see the whole family."]
+    ],
+    "Family-photo phrase."
+  ),
+  q(
+    "French",
+    "Family French",
+    "Children",
+    "Tu aimes les enfants ?",
+    "Do you like children?",
+    [
+      ["Oui, j’aime beaucoup les enfants.", "Yes, I like children very much."],
+      ["Oui, ils sont très mignons.", "Yes, they are very cute."]
+    ],
+    "Family gathering phrase."
+  ),
+  q(
+    "French",
+    "Family French",
+    "Work",
+    "Tu fais quoi dans la vie ?",
+    "What do you do in life / for work?",
+    [
+      ["Je travaille / j’étudie en Irlande.", "I work / study in Ireland."],
+      ["Je peux expliquer en anglais, si ça va.", "I can explain in English, if that is okay."]
+    ],
+    "Personal question."
+  ),
+  q(
+    "French",
+    "Family French",
+    "Asking back",
+    "Et toi, tu fais quoi dans la vie ?",
+    "And you, what do you do?",
+    [
+      ["Et vous, vous faites quoi dans la vie ?", "And you, what do you do?"],
+      ["Vous travaillez dans quoi ?", "What field do you work in?"]
+    ],
+    "Helps Suzanne ask back."
+  ),
+  q(
+    "French",
+    "Family French",
+    "Residence",
+    "Tu habites loin d’ici ?",
+    "Do you live far from here?",
+    [
+      ["Vous habitez loin d’ici ?", "Do you live far from here?"],
+      ["Ah d’accord. C’est loin ?", "Ah okay. Is it far?"]
+    ],
+    "Asking relatives."
+  ),
+
+  // -------------------------
+  // Andy
+  // -------------------------
+  q(
+    "French",
+    "Andy",
+    "Meeting Andy",
+    "Comment tu as rencontré Andy ?",
+    "How did you meet Andy?",
+    [
+      ["On s’est rencontrés en Irlande.", "We met in Ireland."],
+      ["On s’est rencontrés à Dublin.", "We met in Dublin."]
+    ],
+    "Very likely family question."
+  ),
+  q(
+    "French",
+    "Andy",
+    "Andy kindness",
+    "Andy est gentil avec toi ?",
+    "Is Andy kind to you?",
+    [
+      ["Oui, il est très gentil avec moi.", "Yes, he is very kind to me."],
+      ["Oui, il prend soin de moi.", "Yes, he takes care of me."]
+    ],
+    "Family-safe relationship answer."
+  ),
+  q(
+    "French",
+    "Andy",
+    "Happiness",
+    "Tu es heureuse avec lui ?",
+    "Are you happy with him?",
+    [
+      ["Oui, je suis très heureuse avec lui.", "Yes, I am very happy with him."],
+      ["Oui, il compte beaucoup pour moi.", "Yes, he means a lot to me."]
+    ],
+    "Likely and important."
+  ),
+  q(
+    "French",
+    "Andy",
+    "Andy child",
+    "Andy était comment quand il était petit ?",
+    "What was Andy like when he was little?",
+    [
+      ["Ah oui ? Ça ne m’étonne pas !", "Oh really? That does not surprise me!"],
+      ["Oui, ça je peux imaginer.", "Yes, I can imagine that."]
+    ],
+    "Photo/family story response."
+  )
+);
+
+
+
+
+    let data = loadData();
+    let currentSession = null;
+
+    function uid(prefix) {
+      return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function card(language, category, situation, front, back, note = "") {
+      return { id: uid("card"), language, category, situation, front, back, note, createdAt: new Date().toISOString() };
+    }
+
+    function q(language, category, situation, question, questionEnglish, answers, note = "") {
+      return { id: uid("q"), language, category, situation, question, questionEnglish, answers: answers.map(a => ({ text: a[0], english: a[1] })), note, createdAt: new Date().toISOString() };
+    }
+
+    function dlg(category, title, lines) {
+      return { id: uid("dlg"), category, title, lines: lines.map(l => ({ speaker: l[0], text: l[1], english: l[2] })) };
+    }
+
+    function clone(obj) {
+      return JSON.parse(JSON.stringify(obj));
+    }
+
+    function loadData() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        const fresh = clone(starterData);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+        return fresh;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        return {
+          cards: parsed.cards || [],
+          questions: parsed.questions || [],
+          dialogues: parsed.dialogues || []
+        };
+      } catch {
+        const fresh = clone(starterData);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+        return fresh;
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      renderAll();
+    }
+
+    function getCategories() {
+      const set = new Set();
+      data.cards.forEach(x => set.add(x.category));
+      data.questions.forEach(x => set.add(x.category));
+      data.dialogues.forEach(x => set.add(x.category));
+      return Array.from(set).sort();
+    }
+
+    function getGroupContent(group) {
+      return {
+        cards: data.cards.filter(item => group.includes.includes(item.category)),
+        questions: data.questions.filter(item => group.includes.includes(item.category)),
+        dialogues: data.dialogues.filter(item => group.includes.includes(item.category))
+      };
+    }
+
+    function getGroupById(groupId) {
+      return categoryGroups.find(group => group.id === groupId);
+    }
+
+    function getDefaultCategory(groupId) {
+      const group = getGroupById(groupId);
+      return group ? group.defaultCategory : "Survival French";
+    }
+
+    function populateSelects() {
+      const cats = getCategories();
+      const practiceGroups = categoryGroups.filter(group => group.id !== "crash_course");
+      document.getElementById("practiceCategory").innerHTML = `<option value="all">All categories</option>` + practiceGroups.map(group => `<option value="${escapeAttr(group.id)}">${escapeHtml(group.title)}</option>`).join("");
+      document.getElementById("cardCategoryGroup").innerHTML = categoryGroups.map(group => `<option value="${escapeAttr(group.id)}">${escapeHtml(group.title)}</option>`).join("");
+      document.getElementById("qCategoryGroup").innerHTML = practiceGroups.map(group => `<option value="${escapeAttr(group.id)}">${escapeHtml(group.title)}</option>`).join("");
+      document.getElementById("categoryList").innerHTML = cats.map(c => `<option value="${escapeAttr(c)}"></option>`).join("");
+    }
+
+    function renderHome() {
+      document.getElementById("homeCategoryCards").innerHTML = categoryGroups.slice(0, 6).map(renderCategoryButton).join("");
+      document.getElementById("homeStats").innerHTML = stat("Cards", data.cards.length) + stat("Questions", data.questions.length) + stat("Dialogues", data.dialogues.length);
+    }
+
+    function renderLearn() {
+      document.getElementById("learnShell").innerHTML = `
+        <div class="card">
+          <h2>Learn</h2>
+          <p class="muted">Choose a category. Content opens only when tapped.</p>
+        </div>
+        <div class="grid two">
+          ${categoryGroups.map(renderCategoryButton).join("")}
+        </div>
+      `;
+    }
+
+    function renderCategoryButton(group) {
+  const content = getGroupContent(group);
+  const lessonsPill = group.id === "crash_course" ? `<span class="pill">${crashLessons.length} lessons</span>` : "";
+  const questionsPill = group.id === "crash_course" ? "" : `<span class="pill">${content.questions.length} questions</span>`;
+  const themeClass = group.theme || "theme-neutral";
+
+  return `
+    <button class="category-button ${themeClass}" data-group-id="${escapeAttr(group.id)}">
+      <h3>${escapeHtml(group.title)}</h3>
+      <p class="muted">${escapeHtml(group.description)}</p>
+      <span class="pill">${content.cards.length} cards</span>
+      ${questionsPill}
+      <span class="pill">${content.dialogues.length} dialogues</span>
+      ${lessonsPill}
+    </button>
+  `;
+}
+
+    function openGroup(groupId) {
+      const group = getGroupById(groupId);
+      if (!group) return;
+      switchTab("learn", false);
+      if (group.id === "crash_course") {
+        renderCrashCourse();
+        return;
+      }
+      const content = getGroupContent(group);
+      const sections = getSections(content);
+      document.getElementById("learnShell").innerHTML = `
+        <div class="card ${group.theme || "theme-neutral"}">
+          <button class="ghost" id="backToLearnButton">Back to Learn</button>
+          <h2>${escapeHtml(group.title)}</h2>
+          <p class="muted">${escapeHtml(group.description)}</p>
+          <span class="pill">${content.cards.length} cards</span>
+          <span class="pill">${content.questions.length} questions</span>
+          <span class="pill">${content.dialogues.length} dialogues</span>
+          <div class="row" style="margin-top:14px;">
+            <button id="practiceThisGroupButton" data-group-id="${escapeAttr(group.id)}">Practice this category</button>
+          </div>
+        </div>
+        <div class="card">
+  <div class="compact-section-heading">
+    <h2>Sections</h2>
+    <span class="pill">${sections.length} sections</span>
+  </div>
+  <div class="scroll-box">
+    <div class="grid two">
+      ${sections.map(section => renderSectionButton(group.id, section, content)).join("")}
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="compact-section-heading">
+    <h2>Dialogues</h2>
+    <span class="pill">${content.dialogues.length} dialogues</span>
+  </div>
+  <div class="scroll-box">
+    <div class="list">
+      ${content.dialogues.length ? content.dialogues.map(renderDialogueItem).join("") : `<p class="muted">Dialogues will be added here in the next step.</p>`}
+    </div>
+  </div>
+</div>
+      `;
+      document.getElementById("backToLearnButton").addEventListener("click", renderLearn);
+      document.getElementById("practiceThisGroupButton").addEventListener("click", event => startGroupPractice(event.currentTarget.dataset.groupId));
+    }
+
+    function getSections(content) {
+      const set = new Set();
+      content.cards.forEach(item => set.add(item.situation || "General"));
+      content.questions.forEach(item => set.add(item.situation || "General"));
+      return Array.from(set).sort();
+    }
+
+    function renderSectionButton(groupId, section, content) {
+      const cards = content.cards.filter(item => (item.situation || "General") === section);
+      const questions = content.questions.filter(item => (item.situation || "General") === section);
+      return `
+        <button class="section-button" data-group-id="${escapeAttr(groupId)}" data-section="${escapeAttr(section)}">
+          <h3>${escapeHtml(section)}</h3>
+          <span class="pill">${cards.length} cards</span>
+          <span class="pill">${questions.length} questions</span>
+        </button>
+      `;
+    }
+
+    function openSection(groupId, section) {
+  const group = getGroupById(groupId);
+  if (!group) return;
+
+  const content = getGroupContent(group);
+  const cards = content.cards.filter(item => (item.situation || "General") === section);
+  const questions = content.questions.filter(item => (item.situation || "General") === section);
+  const themeClass = group.theme || "theme-neutral";
+
+  document.getElementById("learnShell").innerHTML = `
+    <div class="card ${themeClass}">
+      <button class="ghost" id="backToGroupButton">Back to ${escapeHtml(group.title)}</button>
+      <h2>${escapeHtml(section)}</h2>
+      <span class="pill">${cards.length} cards</span>
+      <span class="pill">${questions.length} questions</span>
+    </div>
+    <div class="card section-panel">
+      <h2>Cards</h2>
+      <div class="list">${cards.length ? cards.map(renderCardItem).join("") : `<p class="muted">No cards in this section yet.</p>`}</div>
+    </div>
+    <div class="card section-panel">
+      <h2>Questions</h2>
+      <div class="list">${questions.length ? questions.map(renderQuestionItem).join("") : `<p class="muted">No questions in this section yet.</p>`}</div>
+    </div>
+  `;
+
+  document.getElementById("backToGroupButton").addEventListener("click", () => openGroup(groupId));
+}
+
+   function renderCrashCourse() {
+  document.getElementById("learnShell").innerHTML = `
+    <div class="card theme-neutral">
+      <button class="ghost" id="backToLearnButton">Back to Learn</button>
+      <h2>French Crash Course</h2>
+      <p class="muted">Reference only. This section is not included in MCQ practice.</p>
+    </div>
+    <div class="grid">
+      ${crashLessons.map((lesson, index) => `
+        <button class="lesson-button theme-neutral" data-lesson-id="${escapeAttr(lesson.id)}">
+          <h3>${index + 1}. ${escapeHtml(lesson.title)}</h3>
+          <p class="muted">${escapeHtml(lesson.summary)}</p>
+        </button>
+      `).join("")}
+    </div>
+  `;
+
+  document.getElementById("backToLearnButton").addEventListener("click", renderLearn);
+}
+
+   function openLesson(lessonId) {
+  const lesson = crashLessons.find(item => item.id === lessonId);
+  if (!lesson) return;
+
+  document.getElementById("learnShell").innerHTML = `
+    <div class="card theme-neutral">
+      <button class="ghost" id="backToCrashButton">Back to French Crash Course</button>
+      <h2>${escapeHtml(lesson.title)}</h2>
+      <p class="muted">${escapeHtml(lesson.summary)}</p>
+      ${lesson.sections.map(section => `
+        <div class="item" style="margin-top:12px;">
+          <h3>${escapeHtml(section.heading)}</h3>
+          <p>${escapeHtml(section.body).replace(/\n/g, "<br>")}</p>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  document.getElementById("backToCrashButton").addEventListener("click", renderCrashCourse);
+}
+
+    function renderCardItem(c) {
+      return `<div class="item">
+        <div class="row"><span class="pill">${escapeHtml(c.language)}</span><span class="pill">${escapeHtml(c.situation || "General")}</span></div>
+        <strong>${escapeHtml(c.front)}</strong>
+        <div class="translation">${escapeHtml(c.back)}</div>
+        ${c.note ? `<p class="muted small">${escapeHtml(c.note)}</p>` : ""}
+      </div>`;
+    }
+
+    function renderQuestionItem(qn) {
+      return `<div class="item">
+        <div class="row"><span class="pill">${escapeHtml(qn.language)}</span><span class="pill">${escapeHtml(qn.situation || "General")}</span></div>
+        <strong>${escapeHtml(qn.question)}</strong>
+        <div class="translation">${escapeHtml(qn.questionEnglish)}</div>
+        <p class="small"><strong>Good answers:</strong></p>
+        <ul>${qn.answers.map(a => `<li>${escapeHtml(a.text)} <span class="muted">— ${escapeHtml(a.english)}</span></li>`).join("")}</ul>
+      </div>`;
+    }
+
+    function renderDialogueItem(d) {
+      return `<div class="item">
+        <strong>${escapeHtml(d.title)}</strong>
+        ${d.lines.map(line => `<div class="dialogue-line"><div class="speaker">${escapeHtml(line.speaker)}</div><div>${escapeHtml(line.text)}</div><div class="muted small">${escapeHtml(line.english)}</div></div>`).join("")}
+      </div>`;
+    }
+
+    function renderHelp() {
+      const helpCards = data.cards.filter(c => c.category.includes("Survival") || c.category.includes("Kreol") || (c.situation || "").toLowerCase().includes("understand") || (c.situation || "").toLowerCase().includes("repeat"));
+      document.getElementById("helpContent").innerHTML = helpCards.map(c => `
+        <div class="item">
+          <span class="pill">${escapeHtml(c.language)}</span>
+          <div class="phrase" style="font-size:1.7rem;">${escapeHtml(c.front)}</div>
+          <div class="translation">${escapeHtml(c.back)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderDataSummary() {
+      document.getElementById("dataSummary").innerHTML = stat("Cards", data.cards.length) + stat("Questions", data.questions.length) + stat("Dialogues", data.dialogues.length);
+    }
+
+    function stat(label, num) {
+      return `<div class="stat"><div class="num">${num}</div><div class="muted small">${label}</div></div>`;
+    }
+
+    function startGroupPractice(groupId) {
+      switchTab("practice");
+      document.getElementById("practiceCategory").value = groupId;
+      document.getElementById("practiceMode").value = "mixed";
+      document.getElementById("practiceCount").value = "10";
+      beginPractice();
+    }
+
+    function beginPractice(options = {}) {
+      const mode = options.mode || document.getElementById("practiceMode").value;
+      const category = options.category || document.getElementById("practiceCategory").value;
+      const language = options.language || document.getElementById("practiceLanguage").value;
+      const count = Number(options.count || document.getElementById("practiceCount").value);
+
+      let pool = data.questions.filter(qn => {
+        if (category !== "all") {
+          const group = getGroupById(category);
+          if (group && !group.includes.includes(qn.category)) return false;
+          if (!group && qn.category !== category) return false;
+        }
+        if (language !== "all" && qn.language !== language) return false;
+        return true;
+      });
+
+      if (pool.length < 2) {
+        alert("Not enough questions for this practice filter. Add more questions or choose All categories.");
+        return;
+      }
+
+      pool = shuffle(pool).slice(0, Math.min(count, pool.length));
+      const items = pool.map((qn, index) => {
+        const level = mode === "mixed" ? (index % 2 === 0 ? "level1" : "level2") : mode;
+        return generatePracticeItem(qn, level, language);
+      }).filter(Boolean);
+
+      if (!items.length) {
+        alert("Could not generate practice items. Add more questions and answers.");
+        return;
+      }
+
+      currentSession = { items, index: 0, score: 0, answered: false };
+      document.getElementById("practiceSetup").classList.add("hidden");
+      document.getElementById("practiceResults").classList.add("hidden");
+      document.getElementById("practiceRunner").classList.remove("hidden");
+      renderPracticeItem();
+    }
+
+    function generatePracticeItem(qn, level, languageFilter) {
+      if (level === "level1") {
+        const wrongs = shuffle(data.questions.filter(other => other.id !== qn.id && (languageFilter === "all" || other.language === languageFilter)).map(x => x.questionEnglish)).slice(0, 3);
+        if (wrongs.length < 3) return null;
+        const options = shuffle([qn.questionEnglish, ...wrongs]);
+        return {
+          level,
+          category: qn.category,
+          language: qn.language,
+          promptLabel: "What does this mean?",
+          prompt: qn.question,
+          options: options.map(text => ({ text, isCorrect: text === qn.questionEnglish })),
+          correctText: qn.questionEnglish,
+          explanation: `“${qn.question}” means “${qn.questionEnglish}.”`
+        };
+      }
+
+      const correct = pickRandom(qn.answers);
+      const wrongs = shuffle(data.questions
+        .filter(other => other.id !== qn.id && (languageFilter === "all" || other.language === qn.language))
+        .flatMap(other => other.answers)
+        .filter(a => a.text !== correct.text)
+      ).slice(0, 3);
+
+      if (wrongs.length < 3) return null;
+
+      const options = shuffle([correct, ...wrongs]).map(a => ({ text: a.text, english: a.english, isCorrect: a.text === correct.text }));
+      return {
+        level,
+        category: qn.category,
+        language: qn.language,
+        promptLabel: "Choose the best answer:",
+        prompt: qn.question,
+        promptEnglish: qn.questionEnglish,
+        options,
+        correctText: correct.text,
+        correctEnglish: correct.english,
+        explanation: `Best answer: ${correct.text}`
+      };
+    }
+
+    function renderPracticeItem() {
+      const runner = document.getElementById("practiceRunner");
+      const item = currentSession.items[currentSession.index];
+      const progress = `${currentSession.index + 1} of ${currentSession.items.length}`;
+
+      runner.innerHTML = `
+        <div class="row" style="justify-content:space-between;">
+          <div><span class="pill">${escapeHtml(item.language)}</span><span class="pill">${escapeHtml(item.category)}</span><span class="pill">${item.level === "level1" ? "Level 1" : "Level 2"}</span></div>
+          <div class="muted small">${progress}</div>
+        </div>
+        <h2>${escapeHtml(item.promptLabel)}</h2>
+        <div class="phrase">${escapeHtml(item.prompt)}</div>
+        ${item.promptEnglish && currentSession.answered ? `<div class="translation">${escapeHtml(item.promptEnglish)}</div>` : ""}
+        <div id="optionsBox">
+          ${item.options.map((opt, idx) => `<button class="option" data-index="${idx}">${String.fromCharCode(65 + idx)}. ${escapeHtml(opt.text)}</button>`).join("")}
+        </div>
+        <div id="feedbackBox"></div>
+        <div class="row" style="margin-top:16px; justify-content:space-between;">
+          <button class="ghost" id="endPracticeButton">End</button>
+          <button id="nextQuestionButton" disabled>${currentSession.index === currentSession.items.length - 1 ? "Finish" : "Next"}</button>
+        </div>
+      `;
+
+      runner.querySelectorAll(".option").forEach(btn => {
+        btn.addEventListener("click", () => answerQuestion(Number(btn.dataset.index)));
+      });
+      document.getElementById("nextQuestionButton").addEventListener("click", nextQuestion);
+      document.getElementById("endPracticeButton").addEventListener("click", finishPractice);
+    }
+
+    function answerQuestion(index) {
+      if (currentSession.answered) return;
+      const item = currentSession.items[currentSession.index];
+      const selected = item.options[index];
+      currentSession.answered = true;
+      if (selected.isCorrect) currentSession.score += 1;
+
+      const optionButtons = document.querySelectorAll(".option");
+      optionButtons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (item.options[idx].isCorrect) btn.classList.add("correct");
+        if (idx === index && !item.options[idx].isCorrect) btn.classList.add("incorrect");
+      });
+
+      const box = document.getElementById("feedbackBox");
+      box.innerHTML = selected.isCorrect ? `
+        <div class="feedback good">
+          <strong>Correct.</strong>
+          <p>${escapeHtml(item.explanation)}</p>
+          ${item.correctEnglish ? `<p><strong>${escapeHtml(item.correctText)}</strong><br><span class="muted">${escapeHtml(item.correctEnglish)}</span></p>` : ""}
+        </div>
+      ` : `
+        <div class="feedback bad">
+          <strong>Not this one.</strong>
+          <p><strong>Correct answer:</strong> ${escapeHtml(item.correctText)}</p>
+          ${item.correctEnglish ? `<p class="muted">${escapeHtml(item.correctEnglish)}</p>` : ""}
+          <p>${escapeHtml(item.explanation)}</p>
+        </div>
+      `;
+      document.getElementById("nextQuestionButton").disabled = false;
+    }
+
+    function nextQuestion() {
+      currentSession.answered = false;
+      if (currentSession.index >= currentSession.items.length - 1) {
+        finishPractice();
+        return;
+      }
+      currentSession.index += 1;
+      renderPracticeItem();
+    }
+
+    function finishPractice() {
+      const total = currentSession ? currentSession.items.length : 0;
+      const score = currentSession ? currentSession.score : 0;
+      document.getElementById("practiceRunner").classList.add("hidden");
+      document.getElementById("practiceResults").classList.remove("hidden");
+      document.getElementById("practiceSetup").classList.remove("hidden");
+      document.getElementById("practiceResults").innerHTML = `
+        <h2>Practice complete</h2>
+        <div class="stats">
+          ${stat("Score", `${score}/${total}`)}
+          ${stat("Accuracy", total ? `${Math.round(score / total * 100)}%` : "0%")}
+          ${stat("Questions", total)}
+        </div>
+      `;
+      currentSession = null;
+    }
+
+    function switchTab(tab, resetLearn = true) {
+      document.querySelectorAll(".tab-button").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tab));
+      document.querySelectorAll(".screen").forEach(screen => screen.classList.toggle("active", screen.id === tab));
+      if (tab === "learn" && resetLearn) renderLearn();
+    }
+
+    document.querySelectorAll(".tab-button").forEach(btn => btn.addEventListener("click", () => switchTab(btn.dataset.tab)));
+
+    document.getElementById("homePracticeButton").addEventListener("click", () => {
+      switchTab("practice");
+      beginPractice({ mode: "mixed", category: "all", count: 10 });
+    });
+
+    document.getElementById("homeCrashButton").addEventListener("click", () => openGroup("crash_course"));
+    document.getElementById("startPracticeButton").addEventListener("click", () => beginPractice());
+
+    document.getElementById("learnShell").addEventListener("click", event => {
+      const categoryButton = event.target.closest(".category-button");
+      if (categoryButton) {
+        openGroup(categoryButton.dataset.groupId);
+        return;
+      }
+      const sectionButton = event.target.closest(".section-button");
+      if (sectionButton) {
+        openSection(sectionButton.dataset.groupId, sectionButton.dataset.section);
+        return;
+      }
+      const lessonButton = event.target.closest(".lesson-button");
+      if (lessonButton) {
+        openLesson(lessonButton.dataset.lessonId);
+      }
+    });
+
+    document.getElementById("homeCategoryCards").addEventListener("click", event => {
+      const categoryButton = event.target.closest(".category-button");
+      if (categoryButton) openGroup(categoryButton.dataset.groupId);
+    });
+
+    document.getElementById("floatingHelpButton").addEventListener("click", () => document.getElementById("helpModal").classList.remove("hidden"));
+    document.getElementById("closeHelpButton").addEventListener("click", () => document.getElementById("helpModal").classList.add("hidden"));
+    document.getElementById("helpModal").addEventListener("click", event => {
+      if (event.target.id === "helpModal") document.getElementById("helpModal").classList.add("hidden");
+    });
+
+    document.getElementById("cardForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const groupId = document.getElementById("cardCategoryGroup").value;
+      data.cards.push({
+        id: uid("card"),
+        language: document.getElementById("cardLanguage").value,
+        category: document.getElementById("cardCategory").value.trim() || getDefaultCategory(groupId),
+        situation: document.getElementById("cardSituation").value.trim() || "General",
+        front: document.getElementById("cardFront").value.trim(),
+        back: document.getElementById("cardBack").value.trim(),
+        note: document.getElementById("cardNote").value.trim(),
+        createdAt: new Date().toISOString()
+      });
+      e.target.reset();
+      saveData();
+      alert("Card saved.");
+    });
+
+    document.getElementById("questionForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const answerLines = document.getElementById("qAnswers").value.split("\n").map(x => x.trim()).filter(Boolean);
+      const answers = answerLines.map(line => {
+        const parts = line.split("|");
+        return { text: (parts[0] || "").trim(), english: (parts[1] || "").trim() };
+      }).filter(a => a.text && a.english);
+
+      if (!answers.length) {
+        alert("Add at least one answer using: phrase | English meaning");
+        return;
+      }
+
+      const groupId = document.getElementById("qCategoryGroup").value;
+      data.questions.push({
+        id: uid("q"),
+        language: document.getElementById("qLanguage").value,
+        category: document.getElementById("qCategory").value.trim() || getDefaultCategory(groupId),
+        situation: document.getElementById("qSituation").value.trim() || "General",
+        question: document.getElementById("qText").value.trim(),
+        questionEnglish: document.getElementById("qEnglish").value.trim(),
+        answers,
+        note: document.getElementById("qNote").value.trim(),
+        createdAt: new Date().toISOString()
+      });
+      e.target.reset();
+      saveData();
+      alert("Question saved. It will now appear in MCQ practice.");
+    });
+
+    document.getElementById("exportDataButton").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "kozer-skeleton-backup.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("importFile").addEventListener("change", e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const imported = JSON.parse(reader.result);
+          if (!imported.cards || !imported.questions || !imported.dialogues) throw new Error("Invalid format");
+          if (!confirm("Importing will replace the current local data. Continue?")) return;
+          data = imported;
+          saveData();
+          alert("Data imported.");
+        } catch (err) {
+          alert("Could not import this file. It does not look like a Kozer backup.");
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    });
+
+    document.getElementById("resetDataButton").addEventListener("click", () => {
+      if (!confirm("Reset to starter skeleton? This deletes local changes.")) return;
+      data = clone(starterData);
+      saveData();
+      alert("Starter skeleton restored.");
+    });
+
+    function renderAll() {
+      populateSelects();
+      renderHome();
+      renderLearn();
+      renderHelp();
+      renderDataSummary();
+    }
+
+    function pickRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function escapeHtml(str = "") {
+      return String(str).replace(/[&<>'"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[ch]));
+    }
+
+    function escapeAttr(str = "") { return escapeHtml(str); }
+
+    renderAll();
+  </script>
+</body>
+</html>
